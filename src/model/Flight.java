@@ -9,6 +9,9 @@ package model;
 
 public class Flight {
 	
+	/**
+	 * Airport attributes as defined by the CS509 server interface XML
+	 */
 	private String airplane;
 	private String number;
 	private String flightTime;
@@ -21,6 +24,22 @@ public class Flight {
 	private int firstClassSeats;
 	private int coachSeats;
 	
+	/**
+	 * Initializing constructor.
+	 * 
+	 * All attributes are initialized with input values.
+	 * @param airplane The airplane of the flight
+	 * @param number The flight number
+	 * @param flightTime The duration of the flight
+	 * @param departCode The code of the departure airport
+	 * @param departTime The departure time
+	 * @param arrivalCode The code of the arrival airport
+	 * @param arrivalTime The arrival time
+	 * @param firstClassPrice The price of the first class seat on the flight
+	 * @param coachPrice The price of the coach seat of the flight
+	 * @param firstClassSeats The number of available first class flight on the flight
+	 * @param coachSeats The number of available coach seat on the flight
+	 */
 	public Flight (String airplane, String number, String flightTime, String departCode, String departTime, String arrivalCode,
 			       String arrivalTime, String firstClassPrice, String coachPrice, int firstClassSeats, int coachSeats) {
 		
@@ -38,6 +57,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the airplane of the flight
+	 * 
 	 * @return the airplane
 	 */
 	public String getAirplane() {
@@ -45,6 +66,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the airplane of the flight
+	 * 
 	 * @param airplane the airplane to set
 	 */
 	public void setAirplane(String airplane) {
@@ -52,6 +75,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the flight number
+	 * 
 	 * @return the flight number
 	 */
 	public String getNumber() {
@@ -59,12 +84,17 @@ public class Flight {
 	}
 
 	/**
+	 * Set the flight number
+	 * 
 	 * @param number the flight number
 	 */
 	public void setNumber(String number) {
 		this.number = number;
 	}
+	
 	/**
+	 * Get the duration of the flight
+	 * 
 	 * @return the flightTime
 	 */
 	public String getFlightTime() {
@@ -72,6 +102,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the duration of the flight
+	 * 
 	 * @param flightTime the flightTime to set
 	 */
 	public void setFlightTime(String flightTime) {
@@ -79,6 +111,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the code of the departure airport
+	 * 
 	 * @return the departCode
 	 */
 	public String getDepartCode() {
@@ -86,6 +120,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the code of the departure airport
+	 * 
 	 * @param departCode the departCode to set
 	 */
 	public void setDepartCode(String departCode) {
@@ -93,6 +129,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the departure time of the flight
+	 * 
 	 * @return the departTime
 	 */
 	public String getDepartTime() {
@@ -100,6 +138,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the departure time of the flight
+	 * 
 	 * @param departTime the departTime to set
 	 */
 	public void setDepartTime(String departTime) {
@@ -107,6 +147,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the code of the arrival airport
+	 * 
 	 * @return the arrivalCode
 	 */
 	public String getArrivalCode() {
@@ -114,6 +156,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the code of the arrival airport
+	 * 
 	 * @param arrivalCode the arrivalCode to set
 	 */
 	public void setArrivalCode(String arrivalCode) {
@@ -121,6 +165,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the arrival time of the flight
+	 * 
 	 * @return the arrivalTime
 	 */
 	public String getArrivalTime() {
@@ -128,6 +174,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the arrival time of the flight
+	 * 
 	 * @param arrivalTime the arrivalTime to set
 	 */
 	public void setArrivalTime(String arrivalTime) {
@@ -135,6 +183,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the price of first class seat on the flight
+	 * 
 	 * @return the firstClassPrice
 	 */
 	public String getFirstClassPrice() {
@@ -142,6 +192,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the price of first class seat on the flight
+	 * 
 	 * @param firstClassPrice the firstClassPrice to set
 	 */
 	public void setFirstClassPrice(String firstClassPrice) {
@@ -149,6 +201,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the price of coach seat on the flight
+	 * 
 	 * @return the coachPrice
 	 */
 	public String getCoachPrice() {
@@ -156,6 +210,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the price of coach seat on the flight
+	 * 
 	 * @param coachPrice the coachPrice to set
 	 */
 	public void setCoachPrice(String coachPrice) {
@@ -163,6 +219,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the number of available first class seats on the flight
+	 * 
 	 * @return the firstClassSeats
 	 */
 	public int getFirstClassSeats() {
@@ -170,6 +228,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the number of available first class seats on the flight
+	 * 
 	 * @param firstClassSeats the firstClassSeats to set
 	 */
 	public void setFirstClassSeats(int firstClassSeats) {
@@ -177,6 +237,8 @@ public class Flight {
 	}
 
 	/**
+	 * Get the number of available coach seats on the flight
+	 * 
 	 * @return the coachSeats
 	 */
 	public int getCoachSeats() {
@@ -184,6 +246,8 @@ public class Flight {
 	}
 
 	/**
+	 * Set the number of available coach seats on the flight
+	 * 
 	 * @param coachSeats the coachSeats to set
 	 */
 	public void setCoachSeats(int coachSeats) {
