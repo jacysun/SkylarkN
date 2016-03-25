@@ -49,16 +49,14 @@
 
 <div id="main-content" class="container">
 <div class="row">
-  <%
-  /*  <div class="col-xs-12 col-sm-2">
+  <div class="col-xs-12 col-sm-2">
    <p>Stops</p>
       <form id="stop" name="stop_form">
         <input type="checkbox" name="stop" value="nonstop" checked> nonstop<br>
         <input type="checkbox" name="stop" value="onestop" checked> 1 stop<br>
         <input type="checkbox" name="stop" value="twostops" checked> 2 stops<br>
       </form>
-   </div> */ 
-   %>
+   </div> 
    
    <div id="results" class="col-xs-12 col-sm-10">
    <%
