@@ -23,6 +23,7 @@ public class Airport {
 	private String code;         // Three character code of the airport
 	private double latitude;     // Latitude of the airport in decimal format
 	private double longitude;    // Longitude of the airport in decimal format
+	private String timeZone;	 // timeZone code get from Google API, possible null
 	
 	/**
 	 * Default constructor
@@ -125,5 +126,13 @@ public class Airport {
 	 */
 	public void setLongitude(double longitude) {
 		this.longitude = longitude;
+	}
+	
+	public String getTimeZone(){
+		return this.timeZone;
+	}
+	
+	public void setTimeZone(String zone){
+		this.timeZone = zone;
 	}
 }

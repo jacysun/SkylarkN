@@ -6,7 +6,10 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Locale;
 import java.util.TimeZone;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,7 +37,10 @@ public class MyTime{
 	 * @return
 	 */
 	public static Calendar gmtToLocal(Calendar gmtCal, Airport airport){
-		String timeZone = timeZoneForAirport(airport);
+		String timeZone = new String();
+		if(airport.getTimeZone()==null){
+			timeZone = timeZoneForAirport(airport);
+		}
 		Calendar cal = (Calendar) gmtCal.clone();
 		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
 		cal.setTimeZone(TimeZone.getTimeZone(timeZone));
@@ -48,7 +54,10 @@ public class MyTime{
 	 * @return
 	 */
 	public static Calendar localToGmt(Calendar localCal, Airport airport){
-		String timeZone = timeZoneForAirport(airport);
+		String timeZone = new String();
+		if(airport.getTimeZone()==null){
+			timeZone = timeZoneForAirport(airport);
+		}
 		Calendar cal = (Calendar) localCal.clone();
 		cal.setTimeZone(TimeZone.getTimeZone(timeZone));
 		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -153,5 +162,23 @@ public class MyTime{
 			ioe.printStackTrace();
 			return null;
 		}
+	}
+	/**
+	 * Convert String to calendar form "yyyy MMM dd HH:mm z"
+	 * 
+	 * @param dateString
+	 * @return
+	 */
+	public static Calendar StringToCalendar(String dateString){
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+		SimpleDateFormat format = new SimpleDateFormat("yyyy MMM dd HH:mm z",Locale.ENGLISH);
+		try {
+			cal.setTime(format.parse(dateString));
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+		return cal;	
 	}
 }
