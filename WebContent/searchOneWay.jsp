@@ -73,8 +73,8 @@
      </div>
 		
    <%
-     String departDate = "20" + depDate.substring(6,8) + "_" + depDate.substring(0,2) + "_" + depDate.substring(3,5); // IDE test
-     //String departDate = depDate.substring(0,4) + "_" + depDate.substring(5,7) + "_" + depDate.substring(8,10); // chrome
+     //String departDate = "20" + depDate.substring(6,8) + "_" + depDate.substring(0,2) + "_" + depDate.substring(3,5); // IDE test
+     String departDate = depDate.substring(0,4) + "_" + depDate.substring(5,7) + "_" + depDate.substring(8,10); // chrome
      FlightParser fp = new FlightParser();
 	 fp.start(departure, departDate);
      ArrayList<Flight> fl = new ArrayList<Flight>();
