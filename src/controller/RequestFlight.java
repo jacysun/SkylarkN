@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * Servlet implementation class RequestFlight 
- * This class gets search parameters from UI and redirect to searchOneWay.jsp or searchRoundTrip.jsp to display the itinerary results.
  */
 @WebServlet("/RequestFlight")
 public class RequestFlight extends HttpServlet {
@@ -23,12 +22,14 @@ public class RequestFlight extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
+		PrintWriter out = response.getWriter();
 		String trip = request.getParameter("trip");
 		String departure = request.getParameter("from");
 		String arrival = request.getParameter("to");
 		String depDate = request.getParameter("depart");
 		String retDate = request.getParameter("return");
-		String seat = request.getParameter("seat type");	
+		String seat = request.getParameter("seat type");
+		//out.println("We know you searched for " + trip + " " + departure + " " + arrival + " " + depDate + " " + seat);	
       
         request.setAttribute("departure", departure);
         request.setAttribute("arrival", arrival);
