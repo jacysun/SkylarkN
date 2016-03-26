@@ -22,7 +22,7 @@ public class RequestFlight extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		response.setContentType("text/html");
-		PrintWriter out = response.getWriter();
+		//PrintWriter out = response.getWriter();
 		String trip = request.getParameter("trip");
 		String departure = request.getParameter("from");
 		String arrival = request.getParameter("to");
@@ -31,20 +31,16 @@ public class RequestFlight extends HttpServlet {
 		String seat = request.getParameter("seat type");
 		//out.println("We know you searched for " + trip + " " + departure + " " + arrival + " " + depDate + " " + seat);	
       
-        request.setAttribute("departure", departure);
+        request.setAttribute("trip", trip);
+		request.setAttribute("departure", departure);
         request.setAttribute("arrival", arrival);
         request.setAttribute("depDate", depDate);
         request.setAttribute("retDate", retDate);
         request.setAttribute("seat", seat);
+        
+		RequestDispatcher dispatcher = request.getRequestDispatcher("searchResult.jsp");
+		dispatcher.forward(request, response);
+		return;
 		
-		if (trip.equals("one-way")) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("searchOneWay.jsp");
-			dispatcher.forward(request, response);
-			return;
-		} else if (trip.equals("round-trip")) {
-			RequestDispatcher dispatcher = request.getRequestDispatcher("searchRoundTrip.jsp");
-			dispatcher.forward(request, response);
-			return;
-		}
 	}
 }

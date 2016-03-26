@@ -49,50 +49,74 @@
 
 <div id="main-content" class="container">
 <div class="row">
-  <%
-  /*  <div class="col-xs-12 col-sm-2">
+  <div class="col-xs-12 col-sm-2">
    <p>Stops</p>
-      <form id="stop" name="stop_form">
-        <input type="checkbox" name="stop" value="nonstop" checked> nonstop<br>
-        <input type="checkbox" name="stop" value="onestop" checked> 1 stop<br>
-        <input type="checkbox" name="stop" value="twostops" checked> 2 stops<br>
+      <form id="stop" name="stop_form" action="SortFlight">
+        <input type="checkbox" name="nonstop" value="nonstop" checked> nonstop<br>
+        <input type="checkbox" name="onestop" value="onestop" checked> 1 stop<br>
+        <input type="checkbox" name="twostops" value="twostops" checked> 2 stops<br>
       </form>
-   </div> */ 
-   %>
+   </div> 
    
    <div id="results" class="col-xs-12 col-sm-10">
-<%
-String departure = (String) request.getAttribute("departure");
-String arrival = (String) request.getAttribute("arrival");
-String depDate = (String) request.getAttribute("depDate");
-String retDate = (String) request.getAttribute("retDate");
-String seattype = (String) request.getAttribute("seat");
-%>
-<div id="summary">
-       <p><%out.println(departure + " <-> " + arrival + "  Depart: " + depDate + " Return: " + retDate + "  " + seattype); %>
+   <%
+     String trip = (String) request.getAttribute("trip");
+     String departure = (String) request.getAttribute("departure");
+     String arrival = (String) request.getAttribute("arrival");
+     String depDate = (String) request.getAttribute("depDate");
+     String retDate = (String) request.getAttribute("retDate");
+     String seattype = (String) request.getAttribute("seat");
+     
+     if (trip.equals("one-way")) {
+   %>
+     <div id="summary">
+       <p><%out.println(departure + " -> " + arrival + "  " + depDate +  "  " + seattype); %>
        <span><a href="index.html"><button type="button">Change</button></a></span></p><hr>
-</div>
-
-<% 
-String departDate = "20" + depDate.substring(6,8) + "_" + depDate.substring(0,2) + "_" + depDate.substring(3,5); // IDE test
-//String departDate = depDate.substring(0,4) + "_" + depDate.substring(5,7) + "_" + depDate.substring(8,10);   // chrome
-//String returnDate = retDate.substring(0,4) + "_" + retDate.substring(5,7) + "_" + retDate.substring(8,10);   //chrome
-FlightParser fp = new FlightParser();
-fp.start(departure, departDate);
-ArrayList<Flight> fl = new ArrayList<Flight>();
-fl = fp.flightList;
-for (int i = 0; i < fp.flightList.size(); i++) { %>
-	<p><%out.println("Airplane: " + fl.get(i).getAirplane());%></p>
+     </div>
+		
+   <%
+     String departDate = "20" + depDate.substring(6,8) + "_" + depDate.substring(0,2) + "_" + depDate.substring(3,5); // IDE test
+     //String departDate = depDate.substring(0,4) + "_" + depDate.substring(5,7) + "_" + depDate.substring(8,10); // chrome
+     FlightParser fp = new FlightParser();
+	 fp.start(departure, departDate);
+     ArrayList<Flight> fl = new ArrayList<Flight>();
+	 fl = fp.flightList;
+	 for (int i = 0; i < fp.flightList.size(); i++) { %>
+ 	       <p><%out.println("Airplane: " + fl.get(i).getAirplane());%></p>
  	       <p><%out.println("Flight Number: " + fl.get(i).getNumber());%></p>
            <p><%out.println("Duration: " + fl.get(i).getFlightTime());%></p>
  	       <p><%out.println("Departure: " + fl.get(i).getDepartCode() + " - " + fl.get(i).getDepartTime());%></p>
  	       <p><%out.println("Arrival: " + fl.get(i).getArrivalCode() + " - " + fp.flightList.get(i).getArrivalTime());%></p>
  	       <p><%out.println("Coach Seats: " + fl.get(i).getCoachSeats() + " - " + fl.get(i).getCoachPrice());%></p>
  	       <p><%out.println("First Class Seats: " + fl.get(i).getFirstClassSeats() + " - " + fl.get(i).getFirstClassPrice());%></p><hr>
-<%}
+   <%}
+    } else if (trip.equals("round-trip")) { %>
+    	<div id="summary">
+          <p><%out.println(departure + " <-> " + arrival + "  Depart: " + depDate + " Return: " + retDate + "  " + seattype); %>
+          <span><a href="index.html"><button type="button">Change</button></a></span></p><hr>
+        </div>
+
+ <% 
+ String departDate = "20" + depDate.substring(6,8) + "_" + depDate.substring(0,2) + "_" + depDate.substring(3,5); // IDE test
+ //String departDate = depDate.substring(0,4) + "_" + depDate.substring(5,7) + "_" + depDate.substring(8,10);   // chrome
+ //String returnDate = retDate.substring(0,4) + "_" + retDate.substring(5,7) + "_" + retDate.substring(8,10);   //chrome
+ FlightParser fp = new FlightParser();
+ fp.start(departure, departDate);
+ ArrayList<Flight> fl = new ArrayList<Flight>();
+ fl = fp.flightList;
+ for (int i = 0; i < fp.flightList.size(); i++) { %>
+ 	<p><%out.println("Airplane: " + fl.get(i).getAirplane());%></p>
+  	       <p><%out.println("Flight Number: " + fl.get(i).getNumber());%></p>
+            <p><%out.println("Duration: " + fl.get(i).getFlightTime());%></p>
+  	       <p><%out.println("Departure: " + fl.get(i).getDepartCode() + " - " + fl.get(i).getDepartTime());%></p>
+  	       <p><%out.println("Arrival: " + fl.get(i).getArrivalCode() + " - " + fp.flightList.get(i).getArrivalTime());%></p>
+  	       <p><%out.println("Coach Seats: " + fl.get(i).getCoachSeats() + " - " + fl.get(i).getCoachPrice());%></p>
+  	       <p><%out.println("First Class Seats: " + fl.get(i).getFirstClassSeats() + " - " + fl.get(i).getFirstClassPrice());%></p><hr>
+ <%}
+ }
 %>
-</div>
-</div>
+   </div>
+  </div>
 </div>
 
 <footer class="panel-footer">
