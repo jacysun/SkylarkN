@@ -8,6 +8,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -16,37 +18,38 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class AirportParser
-{
-    public static void main(String[] args) 
-    {
-        try {
-            new AirportParser().start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+import model.Airport;
 
-    private void start() {
-    	try {
+public class AirportParser {
+//	public static void main(String[] args) {
+//		try {
+//			new AirportParser().start();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//	}
+
+	public List<Airport> start() {
+		List<Airport> airportList = new ArrayList<>();
+		try {
 			/**
-			 * Create an HTTP connection to the server for a GET 
+			 * Create an HTTP connection to the server for a GET
 			 */
-    		URL url;
-    		HttpURLConnection connection;
-    		BufferedReader reader;
-    		String line;
-    		StringBuffer result = new StringBuffer();
-    		
-    		
-			url = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=airports");
+			URL url;
+			HttpURLConnection connection;
+			BufferedReader reader;
+			String line;
+			StringBuffer result = new StringBuffer();
+
+			url = new URL(
+					"http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=airports");
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("GET");
 			connection.setRequestProperty("User-Agent", "team06");
 
 			/**
-			 * If response code of SUCCESS read the XML string returned
-			 * line by line to build the full return string
+			 * If response code of SUCCESS read the XML string returned line by
+			 * line to build the full return string
 			 */
 			int responseCode = connection.getResponseCode();
 			if ((responseCode >= 200) && (responseCode <= 299)) {
@@ -59,92 +62,89 @@ public class AirportParser
 					result.append(line);
 				}
 				reader.close();
-				System.out.println(result.toString());
+				//System.out.println(result.toString());
 
 				InputStream input = null;
-		    	    try
-		    	    {
-		    	    	byte[] bytes = result.toString().getBytes();
-		    	    	input = new ByteArrayInputStream(bytes);
-		    	       DocumentBuilderFactory factory = DocumentBuilderFactory.
-		    	                                        newInstance();
-		    	       DocumentBuilder builder = factory.newDocumentBuilder();
-		    	       Document doc = builder.parse(input);
-		    	       NodeList airports = doc.getElementsByTagName("Airport");
+				try {
+					byte[] bytes = result.toString().getBytes();
+					input = new ByteArrayInputStream(bytes);
+					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder builder = factory.newDocumentBuilder();
+					Document doc = builder.parse(input);
+					NodeList airports = doc.getElementsByTagName("Airport");
 
-		    	       for(int i=0; i<airports.getLength();i++)
-		    	       {
-		    	          Element airport = (Element)airports.item(i);
-		    	          String code = airport.getAttribute("Code");
-		    	          String name = airport.getAttribute("Name");
-		    	          String lat = airport.getFirstChild().getTextContent();
-		    	          String lon = airport.getLastChild().getTextContent();
-		    	          System.out.println("Code: " + code);
-		    	          System.out.println("Name: " + name);
-		    	          System.out.println("Latitude: " + lat);
-		    	          System.out.println("Longitude: " + lon);
-		    	          System.out.println("--------------------");
-		    	        }
-		    	    }
-		    	    catch (Exception ex)
-		    	    {
-		    	       System.out.println(ex.getMessage());
-		    	    }
-		    	    finally
-		    	    {
-		    	       try
-		    	       {
-		    	          if (input != null)
-		    	          input.close();
-		    	       }
-		    	       catch (IOException ex)
-		    	       {
-		    	          System.out.println(ex.getMessage());
-		    	       }
-		    	    }
+					for (int i = 0; i < airports.getLength(); i++) {
+						Element airport = (Element) airports.item(i);
+						String code = airport.getAttribute("Code");
+						String name = airport.getAttribute("Name");
+						String latString = airport.getFirstChild().getTextContent();
+						double lat = Double.parseDouble(latString.trim());
+						String lonString = airport.getLastChild().getTextContent();
+						double lon = Double.parseDouble(lonString.trim());
+						Airport ap = new Airport(name, code, lat, lon);
+						airportList.add(ap);
+						// System.out.println("Code: " + code);
+						// System.out.println("Name: " + name);
+						// System.out.println("Latitude: " + lat);
+						// System.out.println("Longitude: " + lon);
+						// System.out.println("--------------------");
+					}
+					return airportList;
+				} catch (Exception ex) {
+					System.out.println(ex.getMessage());
+					return null;
+				} finally {
+					try {
+						if (input != null)
+							input.close();
+					} catch (IOException ex) {
+						System.out.println(ex.getMessage());
+					}
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return airportList;
 
-		
-//    	 InputStream inputXml = null;
-//    	    try
-//    	    {
-//    	       inputXml  = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=airports").openConnection().getInputStream();
-//    	       DocumentBuilderFactory factory = DocumentBuilderFactory.
-//    	                                        newInstance();
-//    	       DocumentBuilder builder = factory.newDocumentBuilder();
-//    	       Document doc = builder.parse(inputXml);
-//    	       NodeList nodi = doc.getElementsByTagName("Airport");
-//
-//    	       for(int i=0; i<nodi.getLength();i++)
-//    	       {
-//    	          Element nodo = (Element)nodi.item(i);
-//    	          String code = nodo.getAttribute("Code");
-//    	          String name = nodo.getAttribute("Name");
-//    	          System.out.println("Code: " + code);
-//    	          System.out.println("Name: " + name);
-//
-//    	        }
-//    	    }
-//    	    catch (Exception ex)
-//    	    {
-//    	       System.out.println(ex.getMessage());
-//    	    }
-//    	    finally
-//    	    {
-//    	       try
-//    	       {
-//    	          if (inputXml != null)
-//    	          inputXml.close();
-//    	       }
-//    	       catch (IOException ex)
-//    	       {
-//    	          System.out.println(ex.getMessage());
-//    	       }
-//    	    }
-    	 }
-    }
+		// InputStream inputXml = null;
+		// try
+		// {
+		// inputXml = new
+		// URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=airports").openConnection().getInputStream();
+		// DocumentBuilderFactory factory = DocumentBuilderFactory.
+		// newInstance();
+		// DocumentBuilder builder = factory.newDocumentBuilder();
+		// Document doc = builder.parse(inputXml);
+		// NodeList nodi = doc.getElementsByTagName("Airport");
+		//
+		// for(int i=0; i<nodi.getLength();i++)
+		// {
+		// Element nodo = (Element)nodi.item(i);
+		// String code = nodo.getAttribute("Code");
+		// String name = nodo.getAttribute("Name");
+		// System.out.println("Code: " + code);
+		// System.out.println("Name: " + name);
+		//
+		// }
+		// }
+		// catch (Exception ex)
+		// {
+		// System.out.println(ex.getMessage());
+		// }
+		// finally
+		// {
+		// try
+		// {
+		// if (inputXml != null)
+		// inputXml.close();
+		// }
+		// catch (IOException ex)
+		// {
+		// System.out.println(ex.getMessage());
+		// }
+		// }
+	}
+}

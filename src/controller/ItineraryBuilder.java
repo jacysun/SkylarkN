@@ -18,12 +18,8 @@ public class ItineraryBuilder {
 	 * Filter flight list with non-stop condition from a itinerary
 	 * 
 	 * In parameter input, flightList is a list of flights got from
-	 * FlightParser,
-	 * 
-	 * depAirport, arriAirport and depDate are the airports and departure date
+	 * FlightParser,depAirport, arriAirport and depDate are the airports and departure date
 	 * picked by user.
-	 * 
-	 * 
 	 * 
 	 * @param depAirport
 	 * 
@@ -45,8 +41,8 @@ public class ItineraryBuilder {
 		// Convert local time from user input to GMT
 		Calendar gmtDepDate = MyTime.localToGmt(depDate, depAirport);
 		// Format calendar to string, call FlightParser to get all flights depart from depAirport
-		SimpleDateFormat format = new SimpleDateFormat("yyyy_mm_dd");
-		String depDateString = format.format(gmtDepDate);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+		String depDateString = format.format(gmtDepDate.getTime());
 		FlightParser parser = new FlightParser();
 		parser.start(depAirport.getCode(), depDateString);
 		List<Flight> flightList = parser.flightList;
@@ -66,6 +62,29 @@ public class ItineraryBuilder {
 			}
 		}
 		return resultList;
+	}
+	
+	/**
+	 * Check if the interval between two flights are 2~5 hour which is a qualified layover.
+	 * 
+	 * @param flightFrom
+	 * @param flightTo
+	 * @return boolean 
+	 */
+	public static boolean layoverChecker(Flight flightFrom,Flight flightTo){
+		if(!flightFrom.getArrivalCode().equals(flightTo.getDepartCode())){
+			System.out.print("These two flights are not in the same airport!!!");
+			return false;
+		}
+		Calendar calFrom = MyTime.StringToCalendar(flightFrom.getArrivalTime());
+		Calendar calTo = MyTime.StringToCalendar(flightTo.getDepartTime());
+		double timeInterval = MyTime.getInterval(calFrom, calTo);
+		if(timeInterval>=2&&timeInterval<=5){
+			return true;
+		}else{
+			System.out.println("It's not a qualified layover. Layover time: " + timeInterval);
+			return false;
+		}	
 	}
 
 	
