@@ -41,8 +41,8 @@ public class Driver {
 //		List<Flight> flights = flightParser.flightList;
 		
 		ItineraryBuilder builder = new ItineraryBuilder();
-		List<Flight> flights = builder.nonStopSearch(depAirport, arriAirport, cal);
-		flightsPrinter(flights);
+		//List<Flight> flights = builder.nonStopSearch(depAirport, arriAirport, cal);
+		//flightsPrinter(flights);
 		
 		
 //		Calendar gmtDepDate = MyTime.localToGmt(depDate, depAirport);

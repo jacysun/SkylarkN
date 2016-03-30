@@ -9,6 +9,7 @@ import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
 import javax.xml.parsers.DocumentBuilder;
@@ -29,6 +30,9 @@ public class MyTime{
 	// Base query for timeZone service
 	private static final String baseUrl = "https://maps.googleapis.com/maps/api/timezone/xml?";
 	
+	private HashMap<String,String> timeZoneCache;
+	
+	
 	/**
 	 * Convert a GMT to a local time of an airport
 	 * 
@@ -36,14 +40,14 @@ public class MyTime{
 	 * @param airport
 	 * @return
 	 */
-	public static Calendar gmtToLocal(Calendar gmtCal, Airport airport){
-		String timeZone = new String();
-		if(airport.getTimeZone()==null){
-			timeZone = timeZoneForAirport(airport);
+	public Calendar gmtToLocal(Calendar gmtCal, Airport airport){	
+		if(timeZoneCache.get(airport.getCode())==null){
+			String timeZone = timeZoneForAirport(airport);
+			timeZoneCache.put(airport.getCode(), timeZone);
 		}
 		Calendar cal = (Calendar) gmtCal.clone();
 		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
-		cal.setTimeZone(TimeZone.getTimeZone(timeZone));
+		cal.setTimeZone(TimeZone.getTimeZone(timeZoneCache.get(airport.getCode())));
 		return cal;
 	}
 	/**
@@ -53,13 +57,13 @@ public class MyTime{
 	 * @param airport
 	 * @return
 	 */
-	public static Calendar localToGmt(Calendar localCal, Airport airport){
-		String timeZone = new String();
-		if(airport.getTimeZone()==null){
-			timeZone = timeZoneForAirport(airport);
+	public Calendar localToGmt(Calendar localCal, Airport airport){
+		if(timeZoneCache.get(airport.getCode())==null){
+			String timeZone = timeZoneForAirport(airport);
+			timeZoneCache.put(airport.getCode(), timeZone);
 		}
 		Calendar cal = (Calendar) localCal.clone();
-		cal.setTimeZone(TimeZone.getTimeZone(timeZone));
+		cal.setTimeZone(TimeZone.getTimeZone(timeZoneCache.get(airport.getCode())));
 		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
 		return cal;
 	}
@@ -89,7 +93,7 @@ public class MyTime{
 	 * @param airport
 	 * @return
 	 */
-	private static String timeZoneForAirport(Airport airport){
+	public static String timeZoneForAirport(Airport airport){
 		double latitude = airport.getLatitude();
 		double longitude = airport.getLongitude();
 		StringBuffer response = getResponse(latitude, longitude);
@@ -169,9 +173,9 @@ public class MyTime{
 	 * @param dateString
 	 * @return
 	 */
-	public static Calendar StringToCalendar(String dateString){
+	public static Calendar StringToCalendar(String dateString, String timeZone){
 		Calendar cal = Calendar.getInstance();
-		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+		cal.setTimeZone(TimeZone.getTimeZone(timeZone));
 		SimpleDateFormat format = new SimpleDateFormat("yyyy MMM dd HH:mm z",Locale.ENGLISH);
 		try {
 			cal.setTime(format.parse(dateString));

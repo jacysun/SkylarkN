@@ -16,17 +16,17 @@ public class Test {
 		localCal.set(Calendar.YEAR, 2016);
 		localCal.set(Calendar.MONTH,4);
 		localCal.set(Calendar.DAY_OF_MONTH,10);
-		Calendar cal = MyTime.localToGmt(localCal, depAirport);
+		//Calendar cal = MyTime.localToGmt(localCal, depAirport);
 		System.out.println(localCal.get(Calendar.MONTH));
 		
 		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-		String depDateString = format.format(cal.getTime());
+		//String depDateString = format.format(cal.getTime());
 		System.out.println(depAirport.getCode());
 		System.out.println(depAirport.getName());
 		System.out.println(depAirport.getLatitude());
 		System.out.println(depAirport.getLongitude());
 		System.out.println(depAirport.getTimeZone());
-		System.out.println(depDateString);
+		//System.out.println(depDateString);
 		
 //		parser.start(depAirport.getCode(), depDateString);
 //		List<Flight> flights = parser.flightList;

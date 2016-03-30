@@ -6,12 +6,34 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import java.util.List;
+import java.util.Queue;
 
 import model.Airport;
 
 import model.Flight;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
+
 public class ItineraryBuilder {
+	
+	private HashMap<String, Airport> airportCache;
+	private MyTime myTime;
+	
+	public ItineraryBuilder(){
+		AirportParser parser = new AirportParser();
+		List<Airport> airports = parser.start();
+		for(int i=0;i<airports.size();i++){
+			this.airportCache.put(airports.get(i).getCode(), airports.get(i));
+		}
+	}
+	
+	public void timeZoneSetter(Airport airport){
+		if(airport.getTimeZone()==null){
+			airport.setTimeZone(MyTime.timeZoneForAirport(airport));
+		}
+	}
 
 	/**
 	 * 
@@ -31,38 +53,38 @@ public class ItineraryBuilder {
 	 * 
 	 */
 
-	public List<Flight> nonStopSearch(Airport depAirport, Airport arriAirport,
-			Calendar depDate) {
-
-		// List to contain filtered flights
-		List<Flight> resultList = new ArrayList<>();
-		String arriAirportCode = arriAirport.getCode();
-
-		// Convert local time from user input to GMT
-		Calendar gmtDepDate = MyTime.localToGmt(depDate, depAirport);
-		// Format calendar to string, call FlightParser to get all flights depart from depAirport
-		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-		String depDateString = format.format(gmtDepDate.getTime());
-		FlightParser parser = new FlightParser();
-		parser.start(depAirport.getCode(), depDateString);
-		List<Flight> flightList = parser.flightList;
-
-		// Walk through the input flight list, compared with inputs, if this
-		// flight has same departure date and destination, add it to result
-		// List.
-		for (Flight flight : flightList) {
-
-			Calendar depCal = MyTime.StringToCalendar(flight.getDepartTime());
-
-			if (depCal.get(Calendar.DAY_OF_MONTH) == gmtDepDate.get(Calendar.DAY_OF_MONTH)
-
-					&& flight.getArrivalCode().equals(arriAirportCode)) {
-
-				resultList.add(flight);
-			}
-		}
-		return resultList;
-	}
+//	public List<Flight> nonStopSearch(Airport depAirport, Airport arriAirport,
+//			Calendar depDate) {
+//
+//		// List to contain filtered flights
+//		List<Flight> resultList = new ArrayList<>();
+//		String arriAirportCode = arriAirport.getCode();
+//
+//		// Convert local time from user input to GMT
+//		Calendar gmtDepDate = MyTime.localToGmt(depDate, depAirport);
+//		// Format calendar to string, call FlightParser to get all flights depart from depAirport
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+//		String depDateString = format.format(gmtDepDate.getTime());
+//		FlightParser parser = new FlightParser();
+//		parser.start(depAirport.getCode(), depDateString);
+//		List<Flight> flightList = parser.flightList;
+//
+//		// Walk through the input flight list, compared with inputs, if this
+//		// flight has same departure date and destination, add it to result
+//		// List.
+//		for (Flight flight : flightList) {
+//
+//			Calendar depCal = MyTime.StringToCalendar(flight.getDepartTime(),"GMT");
+//
+//			if (depCal.get(Calendar.DAY_OF_MONTH) == gmtDepDate.get(Calendar.DAY_OF_MONTH)
+//
+//					&& flight.getArrivalCode().equals(arriAirportCode)) {
+//
+//				resultList.add(flight);
+//			}
+//		}
+//		return resultList;
+//	}
 	
 	/**
 	 * Check if the interval between two flights are 2~5 hour which is a qualified layover.
@@ -76,8 +98,8 @@ public class ItineraryBuilder {
 			System.out.print("These two flights are not in the same airport!!!");
 			return false;
 		}
-		Calendar calFrom = MyTime.StringToCalendar(flightFrom.getArrivalTime());
-		Calendar calTo = MyTime.StringToCalendar(flightTo.getDepartTime());
+		Calendar calFrom = MyTime.StringToCalendar(flightFrom.getArrivalTime(),"GMT");
+		Calendar calTo = MyTime.StringToCalendar(flightTo.getDepartTime(),"GMT");
 		double timeInterval = MyTime.getInterval(calFrom, calTo);
 		if(timeInterval>=2&&timeInterval<=5){
 			return true;
@@ -86,6 +108,101 @@ public class ItineraryBuilder {
 			return false;
 		}	
 	}
-
+	
+	/**
+	 * Works as a node in itinerary building process
+	 * 
+	 * @author yizhu
+	 *
+	 */
+	public class Schedule{
+		private int stopCounter;
+		private List<Flight> voyoage = new ArrayList<>();
+		private Airport currentAirport;
+		
+		// create a new schedule from a start airport
+		public Schedule(Airport airport){
+			this.stopCounter = -1;
+			this.currentAirport = airport;
+		}
+		
+		// create new schedule from previous one
+		public Schedule(Schedule preStop){
+			this.stopCounter = preStop.getStopCounter();
+			Collections.copy(this.voyoage, preStop.getVoyoage());
+			this.currentAirport = preStop.getCurrentAirport();
+		}
+		
+		public int getStopCounter(){
+			return this.stopCounter;
+		}
+		
+		public void enterAirport(){
+			this.stopCounter++;
+		}
+		
+		public List<Flight> getVoyoage(){
+			return this.voyoage;
+		}
+		
+		public Airport getCurrentAirport(){
+			return this.currentAirport;
+		}
+		
+		public void setCurrentAirport(String airportCode){
+			this.currentAirport = airportCache.get(airportCode);
+		}
+	}
+	
+	/**
+	 * Build list of itineraries with specified departure airport, destination airport, 
+	 * departure date and max stop over. 
+	 * 
+	 * @param startAirport
+	 * @param destination
+	 * @param depDate
+	 * @param maxStop
+	 * @return
+	 */
+	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, int maxStop){
+		Queue<Schedule> scheduleQueue = new LinkedList<Schedule>();
+		List<Schedule> scheduleList = new ArrayList<>();
+		Schedule start = new Schedule(startAirport);
+		scheduleQueue.add(start);
+		
+		while(!scheduleQueue.isEmpty()){
+			Schedule currentStop = scheduleQueue.poll();
+			currentStop.enterAirport();
+			if(currentStop.getStopCounter()>0){
+				
+				currentStop.setCurrentAirport(currentStop.getVoyoage().get(currentStop.getStopCounter()-1).getArrivalCode());
+			}
+			Airport currentAirport = currentStop.getCurrentAirport();
+			Calendar gmtCal = myTime.localToGmt(depDate, currentAirport);
+			SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+			String depDateString = format.format(gmtCal.getTime());
+			FlightParser parser = new FlightParser();
+			parser.start(currentAirport.getCode(), depDateString);
+			List<Flight> flights = parser.flightList;
+			for(Flight flightTo: flights){
+				if(currentStop.getStopCounter()>0){
+					Flight flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
+					if(!layoverChecker(flightFrom,flightTo)){
+						continue;
+					}
+				}
+				currentStop.getVoyoage().add(flightTo);
+				Schedule newSchedule = new Schedule(currentStop);
+				if(newSchedule.getVoyoage().get(newSchedule.getStopCounter()).getArrivalCode().equals(destination.getCode())){
+					scheduleList.add(newSchedule);
+					continue;
+				}else if(newSchedule.getStopCounter()<maxStop){
+					scheduleQueue.add(newSchedule);
+				}	
+			}
+		}
+		
+		return scheduleList;
+	}
 	
 }
