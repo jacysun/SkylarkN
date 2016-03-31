@@ -24,25 +24,51 @@ public class Driver {
 		
 		AirportParser parser = new AirportParser();
 		List<Airport> airports = parser.start();
-		//airportsPrinter(airports);
-		//System.out.println(airports.size());
+/**
+ * ====================================================
+ * MyTime.timeZoneForAirport test
+ * ====================================================
+ */
+//		Airport testAirport1 = airports.get(3);
+//		System.out.println("Test airport1: " + testAirport1.getCode());
+//		Airport testAirport2 = airports.get(24);
+//		System.out.println("Test airport2: " + testAirport2.getCode());
+//		String testResult1 = MyTime.timeZoneForAirport(testAirport1);
+//		System.out.println("Test result 1: " + testResult1);
+//		String testResult2 = MyTime.timeZoneForAirport(testAirport2);
+//		System.out.println("Test result 2: " + testResult2);
 		
-		//flight infor===================
-		Airport depAirport = airports.get(0);
-		Airport arriAirport = airports.get(5);
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2016);
-		cal.set(Calendar.MONTH,4);
-		cal.set(Calendar.DAY_OF_MONTH,15);
-		//String dateString = "2016_05_15";
-		//============================
-//		FlightParser flightParser = new FlightParser();
-//		flightParser.start(depAirport.getCode(), dateString);
-//		List<Flight> flights = flightParser.flightList;
-		
-		ItineraryBuilder builder = new ItineraryBuilder();
-		//List<Flight> flights = builder.nonStopSearch(depAirport, arriAirport, cal);
-		//flightsPrinter(flights);
+/**
+ * ====================================================
+ *  MyTime.timeZoneForAirport test
+ * ====================================================
+ */		
+/**
+ * ====================================================
+ *  MyTime.layoverChecker test
+ * ====================================================
+ */	  	
+		// Flight arrive at DEN
+		Flight flightArrival = new Flight("A320","3587","227"
+		 ,"CLT","2016 May 13 09:51 GMT"
+		 ,"DEN","2016 May 13 13:38 GMT"
+		 ,"198.00","220.00",20,20);
+		// Flight depart from DEN
+ 		Flight flightDepart = new Flight("C120","2681","327"
+		 ,"DEN","2016 May 13 16:31 GMT"
+		 ,"BOS","2016 May 13 21:38 GMT"
+		 ,"198.00","220.00",20,20);
+ 		
+ 		ItineraryBuilder builder = new ItineraryBuilder();
+ 		boolean result = builder.layoverChecker(flightArrival, flightDepart);
+ 		System.out.println(result);
+	
+/**
+ * ====================================================
+ *  MyTime.layoverChecker test
+ * ====================================================
+ */		
+
 		
 		
 //		Calendar gmtDepDate = MyTime.localToGmt(depDate, depAirport);

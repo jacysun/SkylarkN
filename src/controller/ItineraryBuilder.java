@@ -1,5 +1,6 @@
 package controller;
 
+import java.sql.Driver;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
@@ -18,15 +19,17 @@ import java.util.LinkedList;
 
 public class ItineraryBuilder {
 	
-	private HashMap<String, Airport> airportCache;
+	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
 	private MyTime myTime;
 	
 	public ItineraryBuilder(){
 		AirportParser parser = new AirportParser();
 		List<Airport> airports = parser.start();
+		
 		for(int i=0;i<airports.size();i++){
 			this.airportCache.put(airports.get(i).getCode(), airports.get(i));
 		}
+		this.myTime = new MyTime();
 	}
 	
 	public void timeZoneSetter(Airport airport){
@@ -93,13 +96,19 @@ public class ItineraryBuilder {
 	 * @param flightTo
 	 * @return boolean 
 	 */
-	public static boolean layoverChecker(Flight flightFrom,Flight flightTo){
+	public boolean layoverChecker(Flight flightFrom,Flight flightTo){
 		if(!flightFrom.getArrivalCode().equals(flightTo.getDepartCode())){
 			System.out.print("These two flights are not in the same airport!!!");
 			return false;
 		}
-		Calendar calFrom = MyTime.StringToCalendar(flightFrom.getArrivalTime(),"GMT");
-		Calendar calTo = MyTime.StringToCalendar(flightTo.getDepartTime(),"GMT");
+		Calendar calFrom = myTime.StringToCalendar(flightFrom.getArrivalTime(),"GMT");
+		Calendar calTo = myTime.StringToCalendar(flightTo.getDepartTime(),"GMT");
+		if(calTo.before(calFrom)){
+			System.out.println("The flight take off before you arrival, you can't catch it!!");
+			System.out.println("flight departure time " + calTo.get(Calendar.HOUR_OF_DAY) + ":" + calTo.get(Calendar.MINUTE));
+			System.out.println("flight arrival time " + calFrom.get(Calendar.HOUR_OF_DAY) + ":" + calFrom.get(Calendar.MINUTE)); 
+			return false;
+		}
 		double timeInterval = MyTime.getInterval(calFrom, calTo);
 		if(timeInterval>=2&&timeInterval<=5){
 			return true;
@@ -173,14 +182,23 @@ public class ItineraryBuilder {
 		while(!scheduleQueue.isEmpty()){
 			Schedule currentStop = scheduleQueue.poll();
 			currentStop.enterAirport();
+			Airport currentAirport;
+			String depDateString;
 			if(currentStop.getStopCounter()>0){
 				
 				currentStop.setCurrentAirport(currentStop.getVoyoage().get(currentStop.getStopCounter()-1).getArrivalCode());
+				currentAirport = currentStop.getCurrentAirport();
+				Calendar gmtCal = myTime.localToGmt(depDate, currentAirport);
+				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+				depDateString = format.format(gmtCal.getTime());
+			}else{
+				currentAirport = currentStop.getCurrentAirport();
+				String tempDateString = currentStop.getVoyoage().get(currentStop.getStopCounter()-1).getArrivalTime();
+				Calendar gmtCal = myTime.StringToCalendar(tempDateString, "GMT");
+				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+				depDateString = format.format(gmtCal.getTime());
 			}
-			Airport currentAirport = currentStop.getCurrentAirport();
-			Calendar gmtCal = myTime.localToGmt(depDate, currentAirport);
-			SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-			String depDateString = format.format(gmtCal.getTime());
+			
 			FlightParser parser = new FlightParser();
 			parser.start(currentAirport.getCode(), depDateString);
 			List<Flight> flights = parser.flightList;
@@ -196,12 +214,11 @@ public class ItineraryBuilder {
 				if(newSchedule.getVoyoage().get(newSchedule.getStopCounter()).getArrivalCode().equals(destination.getCode())){
 					scheduleList.add(newSchedule);
 					continue;
-				}else if(newSchedule.getStopCounter()<maxStop){
+				}else if(newSchedule.getStopCounter() < maxStop){
 					scheduleQueue.add(newSchedule);
 				}	
 			}
-		}
-		
+		}	
 		return scheduleList;
 	}
 	

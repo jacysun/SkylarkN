@@ -173,7 +173,7 @@ public class MyTime{
 	 * @param dateString
 	 * @return
 	 */
-	public static Calendar StringToCalendar(String dateString, String timeZone){
+	public Calendar StringToCalendar(String dateString, String timeZone){
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeZone(TimeZone.getTimeZone(timeZone));
 		SimpleDateFormat format = new SimpleDateFormat("yyyy MMM dd HH:mm z",Locale.ENGLISH);
