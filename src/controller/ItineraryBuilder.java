@@ -3,14 +3,10 @@ package controller;
 import java.sql.Driver;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-
 import java.util.Calendar;
-
 import java.util.List;
 import java.util.Queue;
-
 import model.Airport;
-
 import model.Flight;
 
 import java.util.Collections;
@@ -104,16 +100,16 @@ public class ItineraryBuilder {
 		Calendar calFrom = myTime.StringToCalendar(flightFrom.getArrivalTime(),"GMT");
 		Calendar calTo = myTime.StringToCalendar(flightTo.getDepartTime(),"GMT");
 		if(calTo.before(calFrom)){
-			System.out.println("The flight take off before you arrival, you can't catch it!!");
-			System.out.println("flight departure time " + calTo.get(Calendar.HOUR_OF_DAY) + ":" + calTo.get(Calendar.MINUTE));
-			System.out.println("flight arrival time " + calFrom.get(Calendar.HOUR_OF_DAY) + ":" + calFrom.get(Calendar.MINUTE)); 
+			//System.out.println("The flight take off before you arrival, you can't catch it!!");
+			//System.out.println("flight departure time " + calTo.get(Calendar.HOUR_OF_DAY) + ":" + calTo.get(Calendar.MINUTE));
+			//System.out.println("flight arrival time " + calFrom.get(Calendar.HOUR_OF_DAY) + ":" + calFrom.get(Calendar.MINUTE)); 
 			return false;
 		}
 		double timeInterval = MyTime.getInterval(calFrom, calTo);
-		if(timeInterval>=2&&timeInterval<=5){
+		if(timeInterval>=1&&timeInterval<=5){
 			return true;
 		}else{
-			System.out.println("It's not a qualified layover. Layover time: " + timeInterval);
+			//System.out.println("It's not a qualified layover. Layover time: " + timeInterval);
 			return false;
 		}	
 	}
@@ -138,7 +134,10 @@ public class ItineraryBuilder {
 		// create new schedule from previous one
 		public Schedule(Schedule preStop){
 			this.stopCounter = preStop.getStopCounter();
-			Collections.copy(this.voyoage, preStop.getVoyoage());
+			//Collections.copy(this.voyoage, preStop.getVoyoage());
+			for(Flight flight: preStop.getVoyoage()){
+				this.voyoage.add(flight);
+			}
 			this.currentAirport = preStop.getCurrentAirport();
 		}
 		
@@ -167,13 +166,15 @@ public class ItineraryBuilder {
 	 * Build list of itineraries with specified departure airport, destination airport, 
 	 * departure date and max stop over. 
 	 * 
-	 * @param startAirport
-	 * @param destination
-	 * @param depDate
-	 * @param maxStop
-	 * @return
+	 * @param startAirport user inputs departure airport
+	 * @param destination  user inputs arrival airport
+	 * @param depDate	   user inputs departure date
+	 * @param maxStop      user inputs number of stops, optional, if user does not
+	 * 							specify stop, default value is 2.
+	 * @return List of schedules
 	 */
 	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, int maxStop){
+
 		Queue<Schedule> scheduleQueue = new LinkedList<Schedule>();
 		List<Schedule> scheduleList = new ArrayList<>();
 		Schedule start = new Schedule(startAirport);
@@ -184,37 +185,46 @@ public class ItineraryBuilder {
 			currentStop.enterAirport();
 			Airport currentAirport;
 			String depDateString;
+			Flight flightFrom;
 			if(currentStop.getStopCounter()>0){
+				//We have left start airport
+				flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
+				currentStop.setCurrentAirport(flightFrom.getArrivalCode());
+				//System.out.println("currentStop from stop: "+ currentStop.getCurrentAirport().getCode());
 				
-				currentStop.setCurrentAirport(currentStop.getVoyoage().get(currentStop.getStopCounter()-1).getArrivalCode());
 				currentAirport = currentStop.getCurrentAirport();
-				Calendar gmtCal = myTime.localToGmt(depDate, currentAirport);
-				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-				depDateString = format.format(gmtCal.getTime());
-			}else{
-				currentAirport = currentStop.getCurrentAirport();
-				String tempDateString = currentStop.getVoyoage().get(currentStop.getStopCounter()-1).getArrivalTime();
+				String tempDateString = flightFrom.getArrivalTime();
 				Calendar gmtCal = myTime.StringToCalendar(tempDateString, "GMT");
 				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
 				depDateString = format.format(gmtCal.getTime());
+			}else{
+				// We are at the start airport
+				currentAirport = currentStop.getCurrentAirport();
+				//System.out.println("currentStop from start: "+ currentStop.getCurrentAirport().getCode());
+				Calendar gmtCal = myTime.localToGmt(depDate, currentAirport);
+				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+				depDateString = format.format(gmtCal.getTime());
 			}
-			
 			FlightParser parser = new FlightParser();
 			parser.start(currentAirport.getCode(), depDateString);
 			List<Flight> flights = parser.flightList;
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){
-					Flight flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
+					flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
 					if(!layoverChecker(flightFrom,flightTo)){
 						continue;
 					}
+					if(flightTo.getArrivalCode().equals(startAirport.getCode())){
+						continue;
+					}
 				}
-				currentStop.getVoyoage().add(flightTo);
 				Schedule newSchedule = new Schedule(currentStop);
-				if(newSchedule.getVoyoage().get(newSchedule.getStopCounter()).getArrivalCode().equals(destination.getCode())){
+				newSchedule.getVoyoage().add(flightTo);
+				if(flightTo.getArrivalCode().equals(destination.getCode())){
 					scheduleList.add(newSchedule);
 					continue;
-				}else if(newSchedule.getStopCounter() < maxStop){
+				}
+				if(newSchedule.getStopCounter() < maxStop){
 					scheduleQueue.add(newSchedule);
 				}	
 			}

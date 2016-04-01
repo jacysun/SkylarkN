@@ -29,8 +29,8 @@ public class MyTime{
 	private static final String KEY = "&key=AIzaSyAHlM31VslBaSQnxxt6wvDuVll0vpgZvvs";
 	// Base query for timeZone service
 	private static final String baseUrl = "https://maps.googleapis.com/maps/api/timezone/xml?";
-	
-	private HashMap<String,String> timeZoneCache;
+	// cache for storing time zone information
+	private HashMap<String,String> timeZoneCache = new HashMap<String,String>();
 	
 	
 	/**
@@ -41,7 +41,7 @@ public class MyTime{
 	 * @return
 	 */
 	public Calendar gmtToLocal(Calendar gmtCal, Airport airport){	
-		if(timeZoneCache.get(airport.getCode())==null){
+		if(!timeZoneCache.containsKey(airport.getCode())){
 			String timeZone = timeZoneForAirport(airport);
 			timeZoneCache.put(airport.getCode(), timeZone);
 		}
@@ -58,7 +58,7 @@ public class MyTime{
 	 * @return
 	 */
 	public Calendar localToGmt(Calendar localCal, Airport airport){
-		if(timeZoneCache.get(airport.getCode())==null){
+		if(!timeZoneCache.containsKey(airport.getCode())){
 			String timeZone = timeZoneForAirport(airport);
 			timeZoneCache.put(airport.getCode(), timeZone);
 		}
