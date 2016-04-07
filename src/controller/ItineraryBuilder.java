@@ -18,6 +18,9 @@ public class ItineraryBuilder {
 	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
 	private MyTime myTime;
 	
+	/**
+	 * Constructor, initialize airportCache and time converter
+	 */
 	public ItineraryBuilder(){
 		AirportParser parser = new AirportParser();
 		List<Airport> airports = parser.start();
@@ -28,11 +31,6 @@ public class ItineraryBuilder {
 		this.myTime = new MyTime();
 	}
 	
-	public void timeZoneSetter(Airport airport){
-		if(airport.getTimeZone()==null){
-			airport.setTimeZone(MyTime.timeZoneForAirport(airport));
-		}
-	}
 
 	/**
 	 * 
@@ -125,6 +123,8 @@ public class ItineraryBuilder {
 		private List<Flight> voyoage = new ArrayList<>();
 		private Airport currentAirport;
 		
+		public Schedule(){}
+		
 		// create a new schedule from a start airport
 		public Schedule(Airport airport){
 			this.stopCounter = -1;
@@ -174,25 +174,29 @@ public class ItineraryBuilder {
 	 * @return List of schedules
 	 */
 	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, int maxStop){
-
+		// Queue for BFS
 		Queue<Schedule> scheduleQueue = new LinkedList<Schedule>();
+		// Expected return list of schedules
 		List<Schedule> scheduleList = new ArrayList<>();
+		// Empty schedule contains startAirport
 		Schedule start = new Schedule(startAirport);
+		// Enqueue
 		scheduleQueue.add(start);
 		
 		while(!scheduleQueue.isEmpty()){
 			Schedule currentStop = scheduleQueue.poll();
+			// stopCounter++
 			currentStop.enterAirport();
 			Airport currentAirport;
 			String depDateString;
 			Flight flightFrom;
 			if(currentStop.getStopCounter()>0){
-				//We have left start airport
+				// We have left stop over airport
+				// Get the flight take you to current airport
 				flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
-				currentStop.setCurrentAirport(flightFrom.getArrivalCode());
-				//System.out.println("currentStop from stop: "+ currentStop.getCurrentAirport().getCode());
-				
+				currentStop.setCurrentAirport(flightFrom.getArrivalCode());				
 				currentAirport = currentStop.getCurrentAirport();
+				// Get time arrived in current airport 
 				String tempDateString = flightFrom.getArrivalTime();
 				Calendar gmtCal = myTime.StringToCalendar(tempDateString, "GMT");
 				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
@@ -200,36 +204,54 @@ public class ItineraryBuilder {
 			}else{
 				// We are at the start airport
 				currentAirport = currentStop.getCurrentAirport();
-				//System.out.println("currentStop from start: "+ currentStop.getCurrentAirport().getCode());
 				Calendar gmtCal = myTime.localToGmt(depDate, currentAirport);
 				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
 				depDateString = format.format(gmtCal.getTime());
 			}
+			// Get flights depart from current airport
 			FlightParser parser = new FlightParser();
 			parser.start(currentAirport.getCode(), depDateString);
 			List<Flight> flights = parser.flightList;
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){
 					flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
+					// Layover time Check
 					if(!layoverChecker(flightFrom,flightTo)){
 						continue;
 					}
+					// Back track is forbidden
 					if(flightTo.getArrivalCode().equals(startAirport.getCode())){
 						continue;
 					}
 				}
-				Schedule newSchedule = new Schedule(currentStop);
-				newSchedule.getVoyoage().add(flightTo);
+				
+				// Find destination
 				if(flightTo.getArrivalCode().equals(destination.getCode())){
+					// Start new schedule from previous one
+					Schedule newSchedule = new Schedule(currentStop);
+					// Add qualified departing flight to schedule.voyoage
+					newSchedule.getVoyoage().add(flightTo);
 					scheduleList.add(newSchedule);
 					continue;
 				}
-				if(newSchedule.getStopCounter() < maxStop){
+				// Continue to build next stop
+				if(currentStop.getStopCounter() < maxStop){
+					// Start new schedule from previous one
+					Schedule newSchedule = new Schedule(currentStop);
+					// Add qualified departing flight to schedule.voyoage
+					newSchedule.getVoyoage().add(flightTo);
 					scheduleQueue.add(newSchedule);
 				}	
 			}
 		}	
 		return scheduleList;
 	}
+	
+	// One way trip builder
+	public List<Schedule> oneWayTrip(Airport depAirport, Airport destination, Calendar depDate, int maxStop){
+		return itineraryBuilder(depAirport,destination,depDate, maxStop);
+	}
+	
+
 	
 }

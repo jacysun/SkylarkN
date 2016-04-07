@@ -1,7 +1,9 @@
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import controller.AirportParser;
 import controller.FlightParser;
@@ -13,18 +15,25 @@ public class Test {
 
 	public static void main(String[] args) {
 		
-		HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
-		AirportParser parser = new AirportParser();
-		List<Airport> airports = parser.start();
+		long start = System.nanoTime();
 		
-		for(int i=0;i<airports.size();i++){
-			airportCache.put(airports.get(i).getCode(), airports.get(i));
+		for (int j = 0; j < 100; j++) {
+			for (int i = 0; i < 100; i++) {
+				Airport airport = new Airport();
+				if (i < 11) {
+					continue;
+				}
+				if (i > 23 && i < 55) {
+					continue;
+				}
+				if (i + 14 > 98) {
+					continue;
+				}
+			}
 		}
-		
-		for(int i=0;i<airportCache.size();i++){
-			Airport output = airportCache.get(airports.get(i));
-			System.out.println(output.getName());
-		}
+		long end = System.nanoTime();
+	    long used = end-start;
+		System.out.println("used:"+TimeUnit.NANOSECONDS.toMillis(used)+" ms");
 	}
-
+	
 }

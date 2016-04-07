@@ -17,19 +17,13 @@ public class Driver {
 
 	
 	public static void main(String[] args) {
-		itineraryBuilderTest();
+		//itineraryBuilderTest();
+		timeZoneCacheTest();
 		
 
 	}
 		
-//		String date = "2016 Mar 13 20:30 GMT";
-//		Calendar cal = MyTime.StringToCalendar(date);
-//		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
-//		System.out.println(cal.get(Calendar.MONTH));
-//		System.out.println(cal.get(Calendar.DAY_OF_MONTH));
-//		System.out.println(cal.get(Calendar.HOUR_OF_DAY));
-//		System.out.println(cal.get(Calendar.MINUTE));
-//		System.out.println(cal.getTimeZone());
+
 		
 		
 /**
@@ -37,40 +31,70 @@ public class Driver {
  * MyTime.timeZoneForAirport test
  * ====================================================
  */
-//		Airport testAirport1 = airports.get(3);
-//		System.out.println("Test airport1: " + testAirport1.getCode());
-//		Airport testAirport2 = airports.get(24);
-//		System.out.println("Test airport2: " + testAirport2.getCode());
-//		String testResult1 = MyTime.timeZoneForAirport(testAirport1);
-//		System.out.println("Test result 1: " + testResult1);
-//		String testResult2 = MyTime.timeZoneForAirport(testAirport2);
-//		System.out.println("Test result 2: " + testResult2);
-		
+	public void timeZoneConverterTest(){
+		AirportParser parser = new AirportParser();
+		List<Airport> airports = parser.start();
+		Airport testAirport1 = airports.get(3);
+		System.out.println("Test airport1: " + testAirport1.getCode());
+		Airport testAirport2 = airports.get(24);
+		System.out.println("Test airport2: " + testAirport2.getCode());
+		String testResult1 = MyTime.timeZoneForAirport(testAirport1);
+		System.out.println("Test result 1: " + testResult1);
+		String testResult2 = MyTime.timeZoneForAirport(testAirport2);
+		System.out.println("Test result 2: " + testResult2);
+	}
 /**
  * ====================================================
  *  MyTime.timeZoneForAirport test
  * ====================================================
- */		
+ */	
+		
+/**
+ * ====================================================
+ *  MyTime.timeZoneCache test
+ * ====================================================
+ */
+	
+	public static void timeZoneCacheTest(){
+		AirportParser parser = new AirportParser();
+		List<Airport> airports = parser.start();
+		long start = System.nanoTime();
+		MyTime myTime = new MyTime();
+		Calendar cal = Calendar.getInstance();
+		myTime.localToGmt(cal, airports.get(5));
+		long end = System.nanoTime();
+	    long used = end-start;
+		System.out.println("used:"+TimeUnit.NANOSECONDS.toMillis(used)+" ms");
+		myTime.gmtToLocal(cal, airports.get(5));		
+	}
+/**
+ * ====================================================
+ *  MyTime.timeZoneCache test
+ * ====================================================
+ */
+	
+	
 /**
  * ====================================================
  *  ItineraryBuilder.layoverChecker test
  * ====================================================
  */	  	
-//		// Flight arrive at DEN
-//		Flight flightArrival = new Flight("A320","3587","227"
-//		 ,"CLT","2016 May 13 09:51 GMT"
-//		 ,"DEN","2016 May 13 13:38 GMT"
-//		 ,"198.00","220.00",20,20);
-//		// Flight depart from DEN
-// 		Flight flightDepart = new Flight("C120","2681","327"
-//		 ,"DEN","2016 May 13 16:31 GMT"
-//		 ,"BOS","2016 May 13 21:38 GMT"
-//		 ,"198.00","220.00",20,20);
-// 		
-// 		ItineraryBuilder builder = new ItineraryBuilder();
-// 		boolean result = builder.layoverChecker(flightArrival, flightDepart);
-// 		System.out.println(result);
-	
+	public void layoverCheckerTest(){
+		// Flight arrive at DEN
+		Flight flightArrival = new Flight("A320","3587","227"
+		 ,"CLT","2016 May 13 09:51 GMT"
+		 ,"DEN","2016 May 13 13:38 GMT"
+		 ,"198.00","220.00",20,20);
+		// Flight depart from DEN
+ 		Flight flightDepart = new Flight("C120","2681","327"
+		 ,"DEN","2016 May 13 16:31 GMT"
+		 ,"BOS","2016 May 13 21:38 GMT"
+		 ,"198.00","220.00",20,20);
+ 		
+ 		ItineraryBuilder builder = new ItineraryBuilder();
+ 		boolean result = builder.layoverChecker(flightArrival, flightDepart);
+ 		System.out.println(result);
+	}
 /**
  * ====================================================
  *  ItineraryBuilder.layoverChecker test
