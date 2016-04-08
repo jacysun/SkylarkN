@@ -20,8 +20,7 @@ import model.Flight;
  */
 
 public class FlightParser {
-	
-	public ArrayList<Flight> flightList = new ArrayList<Flight>();
+
 
     /**
      * Populates the flight list with flights on a specific date departing from a specific airport
@@ -32,7 +31,8 @@ public class FlightParser {
      * @param depCode	Code of the airport to depart from
      * @param depDate	Date of the departure flight
      */
-    public void start(String depCode, String depDate) {
+    public List<Flight> start(String depCode, String depDate) {
+    	 List<Flight> flightList = new ArrayList<Flight>();
     	 InputStream inputXml = null;
     	 try {
     	     inputXml  = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=departing&airport=" + depCode + "&day=" + depDate).openConnection().getInputStream();
@@ -45,7 +45,7 @@ public class FlightParser {
     	     for(int i=0; i<flights.getLength();i++) {
     	        Element flight = (Element)flights.item(i);
     	        String plane = flight.getAttribute("Airplane");
-    	        String ftime = flight.getAttribute("FlightTime");
+    	        double ftime = Double.parseDouble(flight.getAttribute("FlightTime"));
     	        String num = flight.getAttribute("Number");
     	        Node dep = flight.getFirstChild();
     	        String dcode = dep.getFirstChild().getTextContent();
@@ -55,11 +55,11 @@ public class FlightParser {
     	        String atime = arr.getLastChild().getTextContent();
     	        Node seat = arr.getNextSibling();
     	        int fcn = Integer.parseInt(seat.getFirstChild().getTextContent());
-    	        String fcp = ((Element) seat.getFirstChild()).getAttribute("Price");
+    	        double fcp = Double.parseDouble(((Element) seat.getFirstChild()).getAttribute("Price").replaceAll("[^\\d.]+", ""));
+    	        //double fcp = Double.parseDouble(((Element) seat.getFirstChild()).getAttribute("Price"));
     	        int cn = Integer.parseInt(seat.getLastChild().getTextContent());
-    	        String cp = ((Element) seat.getLastChild()).getAttribute("Price");
-    	        String fcn2 = Integer.toString(fcn);
-    	        String cn2 = Integer.toString(cn);
+    	        double cp = Double.parseDouble(((Element) seat.getLastChild()).getAttribute("Price").replaceAll("[^\\d.]+", ""));
+    	        //double cp = Double.parseDouble(((Element) seat.getLastChild()).getAttribute("Price"));
     	        Flight fl = new Flight(plane, num, ftime, dcode, dtime, acode, atime, fcp, cp, fcn, cn);
     	        flightList.add(fl);  	          
     	      }
@@ -74,7 +74,30 @@ public class FlightParser {
     		  }
     	       catch (IOException ex) {
     	          System.out.println(ex.getMessage());
-    	       }
+    	      }
     	  }
+    	 return flightList;
     }
+    
+    /*public static void main(String[] args) {
+    	List<Flight> flights = new ArrayList<Flight>();
+    	FlightParser fp = new FlightParser();
+    	flights = fp.start("CVG", "2016_05_12");
+    	for (int i = 0; i < flights.size(); i++) {
+    		System.out.println(flights.get(i).getAirplane());
+    		System.out.println(flights.get(i).getNumber());
+    		System.out.println(flights.get(i).getDepartCode());
+    		System.out.println(flights.get(i).getArrivalCode());
+    		System.out.println(flights.get(i).getDepartTime());
+    		System.out.println(flights.get(i).getArrivalTime());
+    		System.out.println(flights.get(i).getDuration());
+    		System.out.println(flights.get(i).getCoachSeats());
+    		System.out.println(flights.get(i).getCoachPrice());
+    		System.out.println(flights.get(i).getFirstClassSeats());
+    		System.out.println(flights.get(i).getFirstClassPrice());   	
+    		System.out.println("-----------------------------");	
+    	}
+    }*/
+   
 }
+

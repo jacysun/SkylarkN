@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,7 +29,7 @@ public class AirportParser {
 //	}
 
 	public List<Airport> start() {
-		List<Airport> airportList = new ArrayList<>();
+		List<Airport> airportList = new ArrayList<Airport>();
 		try {
 			/**
 			 * Create an HTTP connection to the server for a GET
@@ -89,7 +88,6 @@ public class AirportParser {
 						// System.out.println("Longitude: " + lon);
 						// System.out.println("--------------------");
 					}
-					return airportList;
 				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
 					return null;
