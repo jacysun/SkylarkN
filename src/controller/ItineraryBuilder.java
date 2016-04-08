@@ -1,6 +1,5 @@
 package controller;
 
-import java.sql.Driver;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,7 +8,6 @@ import java.util.Queue;
 import model.Airport;
 import model.Flight;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
 
@@ -173,7 +171,7 @@ public class ItineraryBuilder {
 	 * 							specify stop, default value is 2.
 	 * @return List of schedules
 	 */
-	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, int maxStop){
+	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, int maxStop, boolean coach){
 		// Queue for BFS
 		Queue<Schedule> scheduleQueue = new LinkedList<Schedule>();
 		// Expected return list of schedules
@@ -210,8 +208,7 @@ public class ItineraryBuilder {
 			}
 			// Get flights depart from current airport
 			FlightParser parser = new FlightParser();
-			parser.start(currentAirport.getCode(), depDateString);
-			List<Flight> flights = parser.flightList;
+			List<Flight> flights = parser.start(currentAirport.getCode(), depDateString);
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){
 					flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
@@ -248,8 +245,8 @@ public class ItineraryBuilder {
 	}
 	
 	// One way trip builder
-	public List<Schedule> oneWayTrip(Airport depAirport, Airport destination, Calendar depDate, int maxStop){
-		return itineraryBuilder(depAirport,destination,depDate, maxStop);
+	public List<Schedule> oneWayTrip(Airport depAirport, Airport destination, Calendar depDate, int maxStop, boolean coach){
+		return itineraryBuilder(depAirport,destination,depDate, maxStop, coach);
 	}
 	
 

@@ -11,22 +11,22 @@ public class Flight {
 	
 	private String airplane;
 	private String number;
-	private String flightTime;
+	private double duration;
 	private String departCode;
 	private String departTime;
 	private String arrivalCode;
 	private String arrivalTime;
-	private String firstClassPrice;
-	private String coachPrice;
+	private double firstClassPrice;
+	private double coachPrice;
 	private int firstClassSeats;
 	private int coachSeats;
 	
-	public Flight (String airplane, String number, String flightTime, String departCode, String departTime, String arrivalCode,
-			       String arrivalTime, String firstClassPrice, String coachPrice, int firstClassSeats, int coachSeats) {
+	public Flight (String airplane, String number, double duration, String departCode, String departTime, String arrivalCode,
+			       String arrivalTime, double firstClassPrice, double coachPrice, int firstClassSeats, int coachSeats) {
 		
 		this.airplane = airplane;
 		this.number = number;
-		this.flightTime = flightTime;
+		this.duration = duration;
 		this.departCode = departCode;
 		this.departTime = departTime;
 		this.arrivalCode = arrivalCode;
@@ -67,15 +67,15 @@ public class Flight {
 	/**
 	 * @return the flightTime
 	 */
-	public String getFlightTime() {
-		return flightTime;
+	public double getDuration() {
+		return duration;
 	}
 
 	/**
 	 * @param flightTime the flightTime to set
 	 */
-	public void setFlightTime(String flightTime) {
-		this.flightTime = flightTime;
+	public void setDuration(double duration) {
+		this.duration = duration;
 	}
 
 	/**
@@ -137,28 +137,28 @@ public class Flight {
 	/**
 	 * @return the firstClassPrice
 	 */
-	public String getFirstClassPrice() {
+	public double getFirstClassPrice() {
 		return firstClassPrice;
 	}
 
 	/**
 	 * @param firstClassPrice the firstClassPrice to set
 	 */
-	public void setFirstClassPrice(String firstClassPrice) {
+	public void setFirstClassPrice(double firstClassPrice) {
 		this.firstClassPrice = firstClassPrice;
 	}
 
 	/**
 	 * @return the coachPrice
 	 */
-	public String getCoachPrice() {
+	public double getCoachPrice() {
 		return coachPrice;
 	}
 
 	/**
 	 * @param coachPrice the coachPrice to set
 	 */
-	public void setCoachPrice(String coachPrice) {
+	public void setCoachPrice(double coachPrice) {
 		this.coachPrice = coachPrice;
 	}
 
@@ -190,3 +190,4 @@ public class Flight {
 		this.coachSeats = coachSeats;
 	}
 }
+
