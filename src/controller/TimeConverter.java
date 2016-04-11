@@ -9,10 +9,6 @@ import java.util.TimeZone;
 
 public interface TimeConverter {
 	
-	public static void main(String args[]) throws ParseException{
-		System.out.println(calendarToString(Calendar.getInstance()));
-	}
-	
 	public static Calendar stringToCalendar(String input) throws ParseException {
 		DateFormat format = new SimpleDateFormat("yyyy MMM dd HH:mm z");
 		Date date = format.parse(input);
