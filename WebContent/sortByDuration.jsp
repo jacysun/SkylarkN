@@ -4,6 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="view.ItinerarySorter" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -48,6 +49,10 @@
 
 <%
 ArrayList<Itinerary> il = (ArrayList<Itinerary>) session.getAttribute("itineraryList");
+ItinerarySorter sorter = new ItinerarySorter();
+ArrayList<Itinerary> ild = new ArrayList<Itinerary>();
+ild = sorter.sortByDuration(il);
+
 String seatType = (String) session.getAttribute("seatType");
 %>
 
@@ -70,17 +75,17 @@ String seatType = (String) session.getAttribute("seatType");
          <% for (int i = 0; i < il.size(); i++) { %>
         	   <tr style="padding: 5px;"><td style="padding: 5px;">
         	     <table width="100%" id="price" style="display:inline-block; float:left; padding: 5px;">
-                  <tr><td width="100%" align="left" valign="middle"><span>Price:$<%=il.get(i).getTotalPrice() %></span></td></tr>
-                  <tr><td width="100%" align="left" valign="middle"><span>Stop:<%=il.get(i).getStopNum() %></span></td></tr>
-                  <tr><td width="100%" align="left" valign="middle"><span>Duration:<%=il.get(i).getDuration() %>hours</span></td></tr>
+                  <tr><td width="100%" align="left" valign="middle"><span>Price:$<%=ild.get(i).getTotalPrice() %></span></td></tr>
+                  <tr><td width="100%" align="left" valign="middle"><span>Stop:<%=ild.get(i).getStopNum() %></span></td></tr>
+                  <tr><td width="100%" align="left" valign="middle"><span>Duration:<%=ild.get(i).getDuration() %>hours</span></td></tr>
                 </table></td>
                 <td style="padding: 5px;">
         	    <table width="100%" id="flight" style="display: inline-block; padding: 5px;">
         	    <% for (int j = 0; j < il.get(i).getFlights().size(); j++) { %>
-                  <tr><td width="50%" align="right" valign="middle"><span>Airplane:<%=il.get(i).getFlights().get(j).getAirplane() %></span></td>
-                      <td width="50%" align="left" valign="middle"><span>Flight No:<%=il.get(i).getFlights().get(j).getNumber() %></span></td></tr>
-                  <tr><td width="50%" align="right" valign="middle"><span><%=il.get(i).getFlights().get(j).getDepLocal() %><%=il.get(i).getFlights().get(j).getDepartCode() %></span></td>
-                      <td width="50%" align="left" valign="middle"><span>---><%=il.get(i).getFlights().get(j).getArrLocal() %><%=il.get(i).getFlights().get(j).getArrivalCode() %></span></td></tr>
+                  <tr><td width="50%" align="right" valign="middle"><span>Airplane:<%=ild.get(i).getFlights().get(j).getAirplane() %></span></td>
+                      <td width="50%" align="left" valign="middle"><span>Flight No:<%=ild.get(i).getFlights().get(j).getNumber() %></span></td></tr>
+                  <tr><td width="50%" align="right" valign="middle"><span><%=ild.get(i).getFlights().get(j).getDepartTime() %><%=ild.get(i).getFlights().get(j).getDepartCode() %></span></td>
+                      <td width="50%" align="left" valign="middle"><span>---><%=ild.get(i).getFlights().get(j).getArrivalTime() %><%=ild.get(i).getFlights().get(j).getArrivalCode() %></span></td></tr>
                 <% } %>
                 </table></td></tr>
         <% } %> 

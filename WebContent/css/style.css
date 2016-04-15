@@ -49,6 +49,15 @@ body {
 /* END HEADER */
 
 /* MAIN CONTENT */
+#main-content {
+  width: 95%;
+  background-color: #efefef;
+}
+
+#result {
+  width: 95%;
+}
+
 .row img {
   margin: 20px 10px 20px 10px;
 }
@@ -70,6 +79,7 @@ body {
   margin: 30px 10px 30px 10px;
 
 }
+
 /* End Main Content */
 
 /* Footer */

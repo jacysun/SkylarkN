@@ -56,10 +56,8 @@ public class FlightParser {
     	        Node seat = arr.getNextSibling();
     	        int fcn = Integer.parseInt(seat.getFirstChild().getTextContent());
     	        double fcp = Double.parseDouble(((Element) seat.getFirstChild()).getAttribute("Price").replaceAll("[^\\d.]+", ""));
-    	        //double fcp = Double.parseDouble(((Element) seat.getFirstChild()).getAttribute("Price"));
     	        int cn = Integer.parseInt(seat.getLastChild().getTextContent());
     	        double cp = Double.parseDouble(((Element) seat.getLastChild()).getAttribute("Price").replaceAll("[^\\d.]+", ""));
-    	        //double cp = Double.parseDouble(((Element) seat.getLastChild()).getAttribute("Price"));
     	        Flight fl = new Flight(plane, num, ftime, dcode, dtime, acode, atime, fcp, cp, fcn, cn);
     	        flightList.add(fl);  	          
     	      }
