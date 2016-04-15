@@ -122,6 +122,11 @@ public class ItineraryBuilder {
 		private int stopCounter;
 		private List<Flight> voyoage = new ArrayList<>();
 		private Airport currentAirport;
+		private double totalPrice;
+		
+		public void addPrice(double price){
+			this.totalPrice =+ price;
+		}
 		
 		public Schedule(){}
 		
@@ -251,6 +256,7 @@ public class ItineraryBuilder {
 	public List<Schedule> oneWayTrip(Airport depAirport, Airport destination, Calendar depDate, int maxStop){
 		return itineraryBuilder(depAirport,destination,depDate, maxStop);
 	}
+	
 	
 
 	

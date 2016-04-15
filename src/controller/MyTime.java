@@ -183,6 +183,18 @@ public class MyTime{
 			
 			e.printStackTrace();
 		}
-		return cal;	
+		return cal;			
 	}
+	
+	public String calendarToString(Calendar cal){
+		String year = String.valueOf(cal.get(Calendar.YEAR));
+		String month = String.valueOf(cal.get(Calendar.MONTH)+1);
+		String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+		String hour = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+		String minute = String.valueOf(cal.get(Calendar.MINUTE));
+		String timeZone = cal.getTimeZone().getDisplayName();
+		String time = year+" "+month+" "+day+" "+hour+":"+minute+" "+timeZone;
+		return time;
+	}
+	
 }
