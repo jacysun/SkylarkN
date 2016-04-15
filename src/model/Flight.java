@@ -1,5 +1,10 @@
 package model;
 
+import java.text.ParseException;
+import java.util.Calendar;
+
+import controller.MyTime;
+
 /**
  * This class holds values pertaining to a single flight from one airport to another. 
  * Class member attributes are the same as defined by the CS509 server API and store 
@@ -8,6 +13,8 @@ package model;
  */
 
 public class Flight {
+	
+	MyTime myTime = new MyTime();
 	
 	private String airplane;
 	private String number;
@@ -20,6 +27,10 @@ public class Flight {
 	private double coachPrice;
 	private int firstClassSeats;
 	private int coachSeats;
+	
+	public Flight() {
+		
+	}
 	
 	public Flight (String airplane, String number, double duration, String departCode, String departTime, String arrivalCode,
 			       String arrivalTime, double firstClassPrice, double coachPrice, int firstClassSeats, int coachSeats) {
@@ -37,6 +48,25 @@ public class Flight {
 		this.coachSeats = coachSeats;
 	}
 
+	public String getDepLocal() throws ParseException {
+        
+		Airport departure = new Airport();
+		departure = departure.getAirport(this.departCode);
+		Calendar depCal = myTime.StringToCalendar(this.departTime, "GMT");
+		Calendar depLocalCal = myTime.gmtToLocal(depCal, departure);
+		String depLocal = myTime.calendarToString(depLocalCal);	
+		return depLocal;
+	}
+	
+	public String getArrLocal() throws ParseException {
+		Airport arrival = new Airport();
+		arrival = arrival.getAirport(this.arrivalCode);
+		Calendar arrCal = myTime.StringToCalendar(this.arrivalTime, "GMT");
+		Calendar arrLocalCal = myTime.gmtToLocal(arrCal, arrival);
+		String arrLocal = myTime.calendarToString(arrLocalCal);
+		return arrLocal;
+	}
+	
 	/**
 	 * @return the airplane
 	 */
@@ -68,7 +98,9 @@ public class Flight {
 	 * @return the flightTime
 	 */
 	public double getDuration() {
-		return duration;
+		double dur = duration/60;
+		dur = Math.floor(dur*100)/100;
+		return dur;
 	}
 
 	/**
@@ -189,5 +221,6 @@ public class Flight {
 	public void setCoachSeats(int coachSeats) {
 		this.coachSeats = coachSeats;
 	}
+	
 }
 

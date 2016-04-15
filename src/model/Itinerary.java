@@ -36,10 +36,6 @@ public class Itinerary {
 		return stopNum;
 	}
 	
-	public void addFlight(Flight flight) {
-		flights.add(flight);
-	}
-	
 	public List<Flight> getFlights() {
 		return flights;
 	}
@@ -71,13 +67,13 @@ public class Itinerary {
 			if (oneWay) {
 				if (seatType.equals("coach")) {
 					scheduleList = ib.oneWayTrip(departure, arrival, depart, 2, true);
-				} else {
+				} else if (seatType.equals("firstclass")){
 					scheduleList = ib.oneWayTrip(departure, arrival, depart, 2, false);
 				}
 //			} else {
 //				if (seatType.equals("coach")) {
 //					scheduleList = ib.rouneWayTrip(departure, arrival, depart, 2, true);
-//				} else {
+//				} else if (seatType.equals("firstclass")) {
 //					scheduleList = ib.roundWayTrip(departure, arrival, depart, 2, false);
 //				}
 			}
@@ -90,20 +86,25 @@ public class Itinerary {
 					duration += flights.get(j).getDuration();
 					if (seatType.equals("coach")) {
 						totalPrice += flights.get(j).getCoachPrice();
-					} else {
+						System.out.println((j+1) + "leg price: " + flights.get(j).getCoachPrice() + " duration: " + flights.get(j).getDuration());
+					} else if (seatType.equals("firstclass")) {
 						totalPrice += flights.get(j).getFirstClassPrice();
 					}
-					totalPrice = Math.round(totalPrice*100)/100;
 				}
+				totalPrice = Math.floor(totalPrice*100)/100;
+				System.out.println("total Price: " + totalPrice);
 				double interval = 0;
+				MyTime myTime = new MyTime();
 				for (int k = 0; k < stopNum; k++) {
-					MyTime myTime = new MyTime();
 					Calendar arr = myTime.StringToCalendar(flights.get(k).getArrivalTime(),"GMT");
 					Calendar dep = myTime.StringToCalendar(flights.get(k+1).getDepartTime(),"GMT");
 					interval += MyTime.getInterval(arr, dep);
+					System.out.println((k+1) + "interval: " + MyTime.getInterval(arr, dep));
 				}
 				duration = duration + interval;
-				duration = Math.round(duration*100)/100;
+				duration = Math.floor(duration*100)/100;
+				System.out.println("total duration: " + duration) ;
+				System.out.println("---------------");
 
 				itinerary = new Itinerary(stopNum, duration, totalPrice, flights);
 				itineraryList.add(itinerary);
