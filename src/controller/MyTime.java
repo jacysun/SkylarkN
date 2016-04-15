@@ -6,9 +6,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -31,7 +33,6 @@ public class MyTime{
 	private static final String baseUrl = "https://maps.googleapis.com/maps/api/timezone/xml?";
 	// cache for storing time zone information
 	private HashMap<String,String> timeZoneCache = new HashMap<String,String>();
-	
 	
 	/**
 	 * Convert a GMT to a local time of an airport
@@ -186,7 +187,8 @@ public class MyTime{
 		return cal;			
 	}
 	
-	public String calendarToString(Calendar cal){
+
+	public String CalendarToString(Calendar cal){
 		String year = String.valueOf(cal.get(Calendar.YEAR));
 		String month = String.valueOf(cal.get(Calendar.MONTH)+1);
 		String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
@@ -197,4 +199,52 @@ public class MyTime{
 		return time;
 	}
 	
+
+
+	public Calendar stringToCalendar(String input) throws ParseException {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy MMM dd HH:mm z");
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(format.parse(input));
+		return cal;
+	}
+	
+	public String calendarToString(Calendar cal){
+      String year = String.valueOf(cal.get(Calendar.YEAR));
+      String month;
+      switch (cal.get(Calendar.MONTH)+1) {
+		case 1: month = "JAN";
+				break;
+		case 2: month = "FEB";
+				break;
+		case 3: month = "MAR";
+				break;
+		case 4: month = "APR";
+				break;
+		case 5: month = "MAY";
+				break;
+		case 6: month = "JUN";
+				break;
+		case 7: month = "JUL";
+				break;
+		case 8: month = "AUG";
+				break;
+		case 9: month = "SEP";
+				break;
+		case 10: month = "OCT";
+				break;
+		case 11: month = "NOV";
+				break;
+		case 12: month = "DEC";
+				break;
+		default: month = "Invalid";
+				break;
+	}
+      String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+      String hour = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
+      String minute = String.valueOf(cal.get(Calendar.MINUTE));
+      String time = month + " " + day + ", " + year + " " + hour + ":" + minute;
+      return time;
+	}
+	
 }
+

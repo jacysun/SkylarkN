@@ -1,5 +1,10 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import controller.AirportParser;
+
 /**
  * This class holds values pertaining to a single Airport. Class member attributes are
  * the same as defined by the CS509 server API and store values after conversion from 
@@ -68,14 +73,6 @@ public class Airport {
 	public String getName() {
 		return name;
 	}
-	/**
-	 * Set the airport name
-	 * 
-	 * @param name The name of the airport
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	/**
 	 * Get the 3 letter airport code
@@ -84,14 +81,6 @@ public class Airport {
 	 */
 	public String getCode() {
 		return code;
-	}
-	/**
-	 * Set the 3 letter airport code
-	 * 
-	 * @param code The 3 letter airport code
-	 */
-	public void setCode(String code) {
-		this.code = code;
 	}
 	
 	/**
@@ -102,14 +91,6 @@ public class Airport {
 	public double getLatitude() {
 		return latitude;
 	}
-	/**
-	 * Set the latitude for the airport
-	 * 
-	 * @param latitude The north/south coordinate of the airport
-	 */
-	public void setLatitude(double latitude) {
-		this.latitude = latitude;
-	}
 	
 	/**
 	 * Get the longitude for the airport
@@ -119,20 +100,28 @@ public class Airport {
 	public double getLongitude() {
 		return longitude;
 	}
-	/**
-	 * Set the longitude for the airport
-	 * 
-	 * @param longitude The east/west coordinate of the airport
-	 */
-	public void setLongitude(double longitude) {
-		this.longitude = longitude;
-	}
 	
 	public String getTimeZone(){
 		return this.timeZone;
 	}
 	
-	public void setTimeZone(String zone){
-		this.timeZone = zone;
+	public Airport getAirport(String code) {
+		Airport airport = new Airport();
+		List<Airport> airportList = new ArrayList<Airport>();
+		AirportParser ap = new AirportParser();
+		airportList = ap.start();
+		int i = 0;
+		while (!airportList.get(i).getCode().equals(code) && i < airportList.size()) {
+			i++;
+		}
+		if (i == airportList.size()) {
+			return null;
+		} else {
+			String name = airportList.get(i).getName();
+			double lon = airportList.get(i).getLongitude();
+			double lat = airportList.get(i).getLatitude();
+			airport = new Airport (name, code, lat, lon);
+			return airport;
+		}
 	}
 }
