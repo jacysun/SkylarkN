@@ -16,12 +16,19 @@ import model.Flight;
 public class Test {
 
 	public static void main(String[] args) {
-
-		Date maxDate = new Date(Long.MAX_VALUE);
-		Calendar maxCal = Calendar.getInstance();
-		maxCal.setTime(maxDate);
-		System.out.println(maxCal.get(Calendar.YEAR));
-		
+//		long millSec = 0;
+//		Calendar localCal = Calendar.getInstance();
+//		localCal.set(Calendar.HOUR_OF_DAY, 20);
+//		Calendar gmtCal = Calendar.getInstance();
+//		if(localCal.get(Calendar.HOUR_OF_DAY)>19){
+//			millSec = gmtCal.getTimeInMillis()+86400000;
+//		}
+//		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+//		String depDateString = format.format(millSec);
+//		
+//		System.out.println("local: "+ localCal.getTime());
+//		System.out.println("gmt: "+ depDateString);
+		MyTime m = new MyTime();
 	}
 
 }

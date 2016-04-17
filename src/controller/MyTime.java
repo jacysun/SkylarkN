@@ -84,10 +84,14 @@ public class MyTime{
 		@Override
 		public void run(){
 			//mark time starts...
-			long start = System.nanoTime();
+			long start1 = System.nanoTime();
 
 			AirportParser parser = new AirportParser();
 			this.airportList = parser.start();
+			long end1 = System.nanoTime();
+			long used1 = end1 - start1;
+			System.out.println("used flights:" + TimeUnit.NANOSECONDS.toMillis(used1) + " ms");	
+			long start = System.nanoTime();
 			for(Airport airport: airportList){
 				timeZoneCache.put(airport, null);
 			}
@@ -112,7 +116,7 @@ public class MyTime{
 			// mark time ends
 			long end = System.nanoTime();
 			long used = end - start;
-			System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");	
+			System.out.println("used timeZone:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");	
 			System.out.println("Result check: HashMap has "+timeZoneCache.size()+" time zones.");
 			for(Airport airport: timeZoneCache.keySet()){
 				System.out.println("Key: "+airport.getCode()+" Value: "+timeZoneCache.get(airport));
