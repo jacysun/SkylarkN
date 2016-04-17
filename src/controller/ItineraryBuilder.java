@@ -1,8 +1,10 @@
 package controller;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Queue;
 import model.Airport;
@@ -19,14 +21,14 @@ public class ItineraryBuilder {
 	/**
 	 * Constructor, initialize airportCache and time converter
 	 */
-	public ItineraryBuilder(){
+	public ItineraryBuilder(MyTime time){
 		AirportParser parser = new AirportParser();
 		List<Airport> airports = parser.start();
 		
 		for(int i=0;i<airports.size();i++){
 			this.airportCache.put(airports.get(i).getCode(), airports.get(i));
 		}
-		this.myTime = new MyTime();
+		this.myTime = time;
 	}
 	
 
@@ -111,6 +113,36 @@ public class ItineraryBuilder {
 	}
 	
 	/**
+	 * 
+	 * 
+	 * @param flight
+	 * @param returnCal
+	 * @return
+	 */
+	private boolean returnDateChecker(Flight flight, Calendar returnCal, Airport destination){
+		Calendar gmtReturnCal = myTime.localToGmt(returnCal, destination);
+		Calendar gmtFlightToArrival = null;
+		try {
+			gmtFlightToArrival = myTime.stringToCalendar(flight.getArrivalTime());
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if(gmtFlightToArrival.get(Calendar.MONTH)==gmtReturnCal.get(Calendar.MONTH)){
+			if(gmtFlightToArrival.get(Calendar.DAY_OF_MONTH)>gmtReturnCal.get(Calendar.DAY_OF_MONTH)){
+				return true;
+			}else{
+				return false;
+			}
+		}else{
+			if(gmtFlightToArrival.get(Calendar.MONTH)>gmtReturnCal.get(Calendar.MONTH)){
+				return false;
+			}else{
+				return true;
+			}
+		}
+	}
+	
+	/**
 	 * Works as a node in itinerary building process
 	 * 
 	 * @author yizhu
@@ -176,7 +208,8 @@ public class ItineraryBuilder {
 	 * 							specify stop, default value is 2.
 	 * @return List of schedules
 	 */
-	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, int maxStop, boolean coach){
+	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, 
+			int maxStop, boolean requestCoach, Calendar returnDate){
 		// Queue for BFS
 		Queue<Schedule> scheduleQueue = new LinkedList<Schedule>();
 		// Expected return list of schedules
@@ -221,12 +254,20 @@ public class ItineraryBuilder {
 					if(!layoverChecker(flightFrom,flightTo)){
 						continue;
 					}
-					// Back track is forbidden
+					// Backtrack is forbidden
 					if(flightTo.getArrivalCode().equals(startAirport.getCode())){
 						continue;
 					}
+					// Selected coach seat but not available
+					if(requestCoach&&flightTo.getCoachSeats()==0){
+						continue;
+					}
+					// Exclude flights arrive later than return date
+					if(!returnDateChecker(flightTo,returnDate,destination)){
+						continue;
+					}
+								
 				}
-				
 				// Find destination
 				if(flightTo.getArrivalCode().equals(destination.getCode())){
 					// Start new schedule from previous one
@@ -249,10 +290,47 @@ public class ItineraryBuilder {
 		return scheduleList;
 	}
 	
-	// One way trip builder
-	public List<Schedule> oneWayTrip(Airport depAirport, Airport destination, Calendar depDate, int maxStop, boolean coach){
-		return itineraryBuilder(depAirport,destination,depDate, maxStop, coach);
+	/**
+	 * 
+	 * @param depAirport departure airport
+	 * @param destination	destination airport
+	 * @param depDate	departure date
+	 * @param maxStop	maximum stops can be specified by user
+	 * @param coach		if request coach seat
+	 * @return
+	 */
+	public List<Schedule> oneWayTrip(Airport depAirport, Airport destination,
+			Calendar depDate, int maxStop, boolean coach){
+		// Maximum Date
+		Date maxDate = new Date(Long.MAX_VALUE);
+		Calendar maxCal = Calendar.getInstance();
+		maxCal.setTime(maxDate);
+		return itineraryBuilder(depAirport,destination,depDate, maxStop, coach, maxCal);
 	}
+	/**
+	 * Round trip builder
+	 * 
+	 * @param depAirport
+	 * @param destination
+	 * @param depDate
+	 * @param maxStop
+	 * @param coach
+	 * @param returnDate
+	 * @return
+	 */
+	public List<Schedule> roundTrip(Airport depAirport, Airport destination,
+			Calendar depDate, int maxStop, boolean coach, Calendar returnDate){
+		List<Schedule> outBound = itineraryBuilder(depAirport,destination,depDate,maxStop,coach,returnDate);
+		if(outBound.size()==0){
+			// No flights to destination
+			return null;
+		}else{
+			List<Schedule> inBound = itineraryBuilder(destination,depAirport,returnDate,maxStop,coach,depDate);
+			outBound.addAll(inBound);
+			return outBound;
+		}
+	}
+	
 	
 	
 

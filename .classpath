@@ -13,8 +13,8 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="/CS509N/WebContent/WEB-INF/lib/commons-lang3-3.4.jar"/>
-	<classpathentry kind="lib" path="/CS509N/WebContent/WEB-INF/lib/displaytag-1.2.jar"/>
-	<classpathentry kind="lib" path="/CS509N/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/yizhu/Documents/WPI/CS509/project/ProjectTeam6/zany/SkylarkN/WebContent/WEB-INF/lib/commons-lang3-3.4.jar"/>
+	<classpathentry kind="lib" path="/Users/yizhu/Documents/WPI/CS509/project/ProjectTeam6/zany/SkylarkN/WebContent/WEB-INF/lib/displaytag-1.2.jar"/>
+	<classpathentry kind="lib" path="/Users/yizhu/Documents/WPI/CS509/project/ProjectTeam6/zany/SkylarkN/WebContent/WEB-INF/lib/jstl-1.2.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>
