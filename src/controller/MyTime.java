@@ -96,6 +96,7 @@ public class MyTime{
 		timeZoneCache.put("CLE", "America/New_York");
 		timeZoneCache.put("LAS", "America/Los_Angeles");
 		
+//		timeZoneCache = new HashMap<String,String>();
 //		this.runner = new TimeZonePool();
 //		this.thread = new Thread(runner);
 //		thread.start();

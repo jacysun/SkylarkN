@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import controller.AirportParser;
 import controller.FlightParser;
 import controller.ItineraryBuilder;
-import controller.ItineraryBuilder.ItineraryContainer;
+import controller.ItineraryBuilder.RoundTrip;
 import controller.ItineraryBuilder.Schedule;
 import controller.MyTime;
 import model.Airport;
@@ -123,15 +123,15 @@ public class Driver {
 		ItineraryBuilder builder = new ItineraryBuilder(myTime);
 		long start = System.nanoTime();
 		//List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
-		ItineraryContainer container = builder.roundTrip(startAirport, destination, startCal, 2, true, returnCal);
+		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, returnCal);
 		long end = System.nanoTime();
 		long used = end - start;
 		System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
+		System.out.println(container.size());
 		//schedulePrinter(result);
-		System.out.println("OutBound:");
-		schedulePrinter(container.getOutBound());
-		System.out.println("InBound:");
-		schedulePrinter(container.getInBound());
+		//roundTripPrinter(container);
+		
+		
 	}
 
 	/**
@@ -226,6 +226,21 @@ public class Driver {
 			System.out.println("Stops: " + stop);
 			flightsPrinter(schedule.getVoyoage());
 			System.out.println("*************************");
+		}
+	}
+	/**
+	 * Simple method to print schedules for list of roundtrips
+	 * 
+	 * @param roundTrips
+	 */
+	public static void roundTripPrinter(List<RoundTrip> roundTrips){
+		for(RoundTrip trip: roundTrips){
+			System.out.println("+++++++++++++++++++++++++++");
+			System.out.println("Leave Schedule");
+			flightsPrinter(trip.getOutBound().getVoyoage());
+			System.out.println("Return Schedule");
+			flightsPrinter(trip.getInBound().getVoyoage());
+			System.out.println("+++++++++++++++++++++++++++");
 		}
 	}
 

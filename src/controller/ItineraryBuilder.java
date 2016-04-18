@@ -33,7 +33,7 @@ public class ItineraryBuilder {
 	
 	
 	/**
-	 * Check if the interval between two flights are 2~5 hour which is a qualified layover.
+	 * Check if the interval between two flights are 1~5 hour which is a qualified layover.
 	 * 
 	 * @param flightFrom
 	 * @param flightTo
@@ -97,11 +97,6 @@ public class ItineraryBuilder {
 		private int stopCounter;
 		private List<Flight> voyoage = new ArrayList<>();
 		private Airport currentAirport;
-		private double totalPrice;
-		
-		public void addPrice(double price){
-			this.totalPrice =+ price;
-		}
 		
 		public Schedule(){}
 		
@@ -261,24 +256,24 @@ public class ItineraryBuilder {
 		return itineraryBuilder(depAirport,destination,depDate, maxStop, coach, maxCal);
 	}
 	
-	public class ItineraryContainer{
-		private List<Schedule> outBound;
-		private List<Schedule> inBound;
+	public class RoundTrip{
+		private Schedule leaveSchedule;
+		private Schedule returnSchedule;
 		
-		public void setOutBound(List<Schedule> list){
-			this.outBound = list;
+		public void setOutBound(Schedule schedule){
+			this.leaveSchedule = schedule;
 		}
 		
-		public List<Schedule> getOutBound(){
-			return this.outBound;
+		public Schedule getOutBound(){
+			return this.leaveSchedule;
 		}
 		
-		public void setInBound(List<Schedule> list){
-			this.inBound = list;
+		public void setInBound(Schedule schedule){
+			this.returnSchedule = schedule;
 		}
 		
-		public List<Schedule> getInBound(){
-			return this.inBound;
+		public Schedule getInBound(){
+			return this.returnSchedule;
 		}
 	}
 	/**
@@ -292,10 +287,10 @@ public class ItineraryBuilder {
 	 * @param returnDate
 	 * @return
 	 */
-	public ItineraryContainer roundTrip(Airport depAirport, Airport destination,
+	public List<RoundTrip> roundTrip(Airport depAirport, Airport destination,
 			Calendar depDate, int maxStop, boolean coach, Calendar returnDate){
 		List<Schedule> outBound = itineraryBuilder(depAirport,destination,depDate,maxStop,coach,returnDate);
-		ItineraryContainer container = new ItineraryContainer();
+		List<RoundTrip> result = new ArrayList<>();
 		if(outBound.size()==0){
 			// No flights to destination
 			return null;
@@ -304,10 +299,39 @@ public class ItineraryBuilder {
 			Calendar maxCal = Calendar.getInstance();
 			maxCal.setTime(maxDate);
 			List<Schedule> inBound = itineraryBuilder(destination,depAirport,returnDate,maxStop,coach,maxCal);
-			container.setOutBound(outBound);
-			container.setInBound(inBound);
-			return container;
+			result = schedulePicker(outBound,inBound);
+			return result;
 		}
+	}
+	
+	public List<RoundTrip> schedulePicker(List<Schedule> outBound,List<Schedule> inBound){
+		List<RoundTrip> verifiedRoundTrips = new ArrayList<>();
+		
+		for(Schedule inSchedule: inBound){
+			for(Schedule outSchedule: outBound){
+				Flight outFlight = outSchedule.getVoyoage().get(outSchedule.getStopCounter());
+				Flight inFlight = inSchedule.getVoyoage().get(0);
+				Calendar outCal = null;
+				Calendar inCal = null;
+				outCal = myTime.StringToCalendar(outFlight.getArrivalTime(),"GMT");
+				inCal = myTime.StringToCalendar(inFlight.getDepartTime(),"GMT");
+				
+				// Exclude outbound schedule arrives later than the inbound schedule departures from destination
+				if(outCal.compareTo(inCal)==1){
+					continue;
+				}
+				// Exclude inbound schedule leaves destination after outbound schedule arrives in less than 1 hour
+				if(outCal.get(Calendar.DAY_OF_MONTH)==inCal.get(Calendar.DAY_OF_MONTH)&&
+						myTime.getInterval(outCal, inCal)<1){
+					continue;
+				}
+				RoundTrip newRoundTrip = new RoundTrip();
+				newRoundTrip.setOutBound(outSchedule);
+				newRoundTrip.setInBound(inSchedule);
+				verifiedRoundTrips.add(newRoundTrip);	
+			}
+		}		
+		return verifiedRoundTrips;
 	}
 		
 }

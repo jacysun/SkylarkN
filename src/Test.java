@@ -30,13 +30,13 @@ public class Test {
 //		System.out.println("local: "+ localCal.getTime());
 //		System.out.println("gmt: "+ depDateString);
 		MyTime m = new MyTime();
-		ItineraryBuilder builder = new ItineraryBuilder(m);
-//		try {
-//			TimeUnit.SECONDS.sleep(10);
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+//		ItineraryBuilder builder = new ItineraryBuilder(m); 
+		try {
+			TimeUnit.SECONDS.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		for(String code: m.getTimeZones().keySet()){
 			System.out.println("Key: "+code+" Value: "+m.getTimeZones().get(code));
 		}
