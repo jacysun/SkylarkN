@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import controller.AirportParser;
 import controller.FlightParser;
 import controller.ItineraryBuilder;
+import controller.ItineraryBuilder.ItineraryContainer;
 import controller.ItineraryBuilder.Schedule;
 import controller.MyTime;
 import model.Airport;
@@ -16,9 +17,7 @@ import model.Flight;
 public class Driver {
 
 	public static void main(String[] args) {
-		// itineraryBuilderTest();
-		timeZoneCacheTest();
-
+		 itineraryBuilderTest();
 	}
 
 	/**
@@ -105,18 +104,34 @@ public class Driver {
 		Airport destination = airports.get(4);
 		System.out.println("destination:");
 		airportPrinter(destination);
-		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.YEAR, 2016);
-		cal.set(Calendar.MONTH, 4);
-		cal.set(Calendar.DAY_OF_MONTH, 14);
-
-		ItineraryBuilder builder = new ItineraryBuilder();
+		Calendar startCal = Calendar.getInstance();
+		startCal.set(Calendar.YEAR, 2016);
+		startCal.set(Calendar.MONTH, 4);
+		startCal.set(Calendar.DAY_OF_MONTH, 14);
+		Calendar returnCal = Calendar.getInstance();
+		returnCal.set(Calendar.YEAR, 2016);
+		returnCal.set(Calendar.MONTH,4);
+		returnCal.set(Calendar.DAY_OF_MONTH,16);
+		MyTime myTime = new MyTime();
+//		try {
+//			TimeUnit.SECONDS.sleep(10);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		myTime.stop();
+		ItineraryBuilder builder = new ItineraryBuilder(myTime);
 		long start = System.nanoTime();
-		//List<Schedule> result = builder.itineraryBuilder(startAirport, destination, cal, 2);
+		//List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
+		ItineraryContainer container = builder.roundTrip(startAirport, destination, startCal, 2, true, returnCal);
 		long end = System.nanoTime();
 		long used = end - start;
 		System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
 		//schedulePrinter(result);
+		System.out.println("OutBound:");
+		schedulePrinter(container.getOutBound());
+		System.out.println("InBound:");
+		schedulePrinter(container.getInBound());
 	}
 
 	/**

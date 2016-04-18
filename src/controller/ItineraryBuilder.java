@@ -49,7 +49,7 @@ public class ItineraryBuilder {
 		if(calTo.before(calFrom)){
 			return false;
 		}
-		double timeInterval = MyTime.getInterval(calFrom, calTo);
+		double timeInterval = myTime.getInterval(calFrom, calTo);
 		if(timeInterval>=1&&timeInterval<=5){
 			return true;
 		}else{
@@ -64,7 +64,7 @@ public class ItineraryBuilder {
 	 * @param returnCal
 	 * @return
 	 */
-	private boolean returnDateChecker(Flight flight, Calendar returnCal, Airport destination){
+	public boolean returnDateChecker(Flight flight, Calendar returnCal, Airport destination){
 		Calendar gmtReturnCal = myTime.localToGmt(returnCal, destination);
 		Calendar gmtFlightToArrival = null;
 		try {
@@ -74,9 +74,9 @@ public class ItineraryBuilder {
 		}
 		if(gmtFlightToArrival.get(Calendar.MONTH)==gmtReturnCal.get(Calendar.MONTH)){
 			if(gmtFlightToArrival.get(Calendar.DAY_OF_MONTH)>gmtReturnCal.get(Calendar.DAY_OF_MONTH)){
-				return true;
-			}else{
 				return false;
+			}else{
+				return true;
 			}
 		}else{
 			if(gmtFlightToArrival.get(Calendar.MONTH)>gmtReturnCal.get(Calendar.MONTH)){
@@ -219,8 +219,7 @@ public class ItineraryBuilder {
 					// Exclude flights arrive later than return date
 					if(!returnDateChecker(flightTo,returnDate,destination)){
 						continue;
-					}
-								
+					}								
 				}
 				// Find destination
 				if(flightTo.getArrivalCode().equals(destination.getCode())){
@@ -261,6 +260,27 @@ public class ItineraryBuilder {
 		maxCal.setTime(maxDate);
 		return itineraryBuilder(depAirport,destination,depDate, maxStop, coach, maxCal);
 	}
+	
+	public class ItineraryContainer{
+		private List<Schedule> outBound;
+		private List<Schedule> inBound;
+		
+		public void setOutBound(List<Schedule> list){
+			this.outBound = list;
+		}
+		
+		public List<Schedule> getOutBound(){
+			return this.outBound;
+		}
+		
+		public void setInBound(List<Schedule> list){
+			this.inBound = list;
+		}
+		
+		public List<Schedule> getInBound(){
+			return this.inBound;
+		}
+	}
 	/**
 	 * Round trip builder
 	 * 
@@ -272,16 +292,21 @@ public class ItineraryBuilder {
 	 * @param returnDate
 	 * @return
 	 */
-	public List<Schedule> roundTrip(Airport depAirport, Airport destination,
+	public ItineraryContainer roundTrip(Airport depAirport, Airport destination,
 			Calendar depDate, int maxStop, boolean coach, Calendar returnDate){
 		List<Schedule> outBound = itineraryBuilder(depAirport,destination,depDate,maxStop,coach,returnDate);
+		ItineraryContainer container = new ItineraryContainer();
 		if(outBound.size()==0){
 			// No flights to destination
 			return null;
 		}else{
-			List<Schedule> inBound = itineraryBuilder(destination,depAirport,returnDate,maxStop,coach,depDate);
-			outBound.addAll(inBound);
-			return outBound;
+			Date maxDate = new Date(Long.MAX_VALUE);
+			Calendar maxCal = Calendar.getInstance();
+			maxCal.setTime(maxDate);
+			List<Schedule> inBound = itineraryBuilder(destination,depAirport,returnDate,maxStop,coach,maxCal);
+			container.setOutBound(outBound);
+			container.setInBound(inBound);
+			return container;
 		}
 	}
 		

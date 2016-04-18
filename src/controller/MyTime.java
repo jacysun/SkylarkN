@@ -33,177 +33,250 @@ public class MyTime{
 	// Base query for timeZone service
 	private static final String baseUrl = "https://maps.googleapis.com/maps/api/timezone/xml?";
 	// cache for storing time zone information
-	private HashMap<Airport,String> timeZoneCache;
+	private HashMap<String,String> timeZoneCache;
 	
-	private TimeZonePool runner;
-	private Thread thread;
+//	private TimeZonePool runner;
+//	private Thread thread;
 	
 	/**
 	 * MyTime constructor
 	 */
 	public MyTime(){
-		timeZoneCache = new HashMap<Airport,String>();
-		this.runner = new TimeZonePool();
-		this.thread = new Thread(runner);
-		thread.start();
+		timeZoneCache = new HashMap<String,String>();
+		timeZoneCache.put("LAX", "America/Los_Angeles");
+		timeZoneCache.put("HNL", "Pacific/Honolulu");
+		timeZoneCache.put("CLT", "America/Chicago");
+		timeZoneCache.put("STL", "America/New_York");
+		timeZoneCache.put("SLC", "America/Denver");
+		timeZoneCache.put("JFK", "America/New_York");
+		timeZoneCache.put("DFW", "America/Chicago");
+		timeZoneCache.put("BWI", "America/New_York");
+		timeZoneCache.put("AUS", "America/Chicago");
+		timeZoneCache.put("CMH", "America/New_York");
+		timeZoneCache.put("MDW", "America/Chicago");
+		timeZoneCache.put("DCA", "America/New_York");
+		timeZoneCache.put("MIA", "America/New_York");
+		timeZoneCache.put("BOS", "America/New_York");
+		timeZoneCache.put("LGA", "America/New_York");
+		timeZoneCache.put("SMF", "America/Los_Angeles");
+		timeZoneCache.put("IAD", "America/New_York");
+		timeZoneCache.put("SEA", "America/Los_Angeles");
+		timeZoneCache.put("HOU", "America/Chicago");
+		timeZoneCache.put("IAH", "America/Chicago");
+		timeZoneCache.put("MEM", "America/Chicago");
+		timeZoneCache.put("CVG", "America/New_York");
+		timeZoneCache.put("ANC", "America/Anchorage");
+		timeZoneCache.put("RSW", "America/New_York");
+		timeZoneCache.put("OAK", "America/Los_Angeles");
+		timeZoneCache.put("IND", "America/New_York");
+		timeZoneCache.put("ORD", "America/Chicago");
+		timeZoneCache.put("SAN", "America/Los_Angeles");
+		timeZoneCache.put("TPA", "America/New_York");
+		timeZoneCache.put("DTW", "America/New_York");
+		timeZoneCache.put("FLL", "America/New_York");
+		timeZoneCache.put("SAT", "America/Chicago");
+		timeZoneCache.put("SNA", "America/Los_Angeles");
+		timeZoneCache.put("BDL", "America/New_York");
+		timeZoneCache.put("SJC", "America/Los_Angeles");
+		timeZoneCache.put("ONT", "America/Los_Angeles");
+		timeZoneCache.put("PHL", "America/New_York");
+		timeZoneCache.put("SFO", "America/Los_Angeles");
+		timeZoneCache.put("EWR", "America/New_York");
+		timeZoneCache.put("PHX", "America/Phoenix");
+		timeZoneCache.put("RDU", "America/New_York");
+		timeZoneCache.put("PDX", "America/Los_Angeles");
+		timeZoneCache.put("MSP", "America/Chicago");
+		timeZoneCache.put("DEN", "America/Denver");
+		timeZoneCache.put("MCI", "America/Chicago");
+		timeZoneCache.put("MSY", "America/Chicago");
+		timeZoneCache.put("BNA", "America/Chicago");
+		timeZoneCache.put("MCO", "America/New_York");
+		timeZoneCache.put("ATL", "America/New_York");
+		timeZoneCache.put("PIT", "America/New_York");
+		timeZoneCache.put("CLE", "America/New_York");
+		timeZoneCache.put("LAS", "America/Los_Angeles");
+		
+//		this.runner = new TimeZonePool();
+//		this.thread = new Thread(runner);
+//		thread.start();
 	}
 	
-	public HashMap<Airport,String> getTimeZones(){
+	public HashMap<String,String> getTimeZones(){
 		return this.timeZoneCache;
 	}
+//================================================
+//	Thread implementation
+//	
+//	/**
+//	 * Stop background thread.
+//	 */
+//	public void stop(){
+//		if(runner.isFinished()){
+//			try {
+//				thread.join();
+//				System.out.println("Thread stopped.");
+//			} catch (InterruptedException e) {
+//			
+//				e.printStackTrace();
+//			}
+//		} else {
+//			System.out.println("The process is not finished yet...");
+//		}
+//	}
+//	
+//	// Background thread
+//	private class TimeZonePool implements Runnable{
+//		private List<Airport> airportList;
+//		private int counter;
+//		
+//		// Called by other to know if background thread is finished.
+//		public boolean isFinished(){
+//			if(counter==airportList.size()){
+//				return true;
+//			} else{
+//				return false;
+//			}
+//		}
+//		
+//		@Override
+//		public void run(){
+//			//mark time starts...
+//			long start1 = System.nanoTime();
+//
+//			AirportParser parser = new AirportParser();
+//			this.airportList = parser.start();
+//			long end1 = System.nanoTime();
+//			long used1 = end1 - start1;
+//			System.out.println("used airports:" + TimeUnit.NANOSECONDS.toMillis(used1) + " ms");	
+//			long start = System.nanoTime();
+//			for(Airport airport: airportList){
+//				timeZoneCache.put(airport.getCode(), null);
+//			}
+//			this.counter = 0;
+//			while(counter<timeZoneCache.size()){
+//				for(String airportCode: timeZoneCache.keySet()){
+//					if(timeZoneCache.get(airportCode)==null){
+//						String zone = timeZoneForAirport(getAirport(airportCode,airportList));
+//						timeZoneCache.put(airportCode, zone);
+//						if(!(timeZoneCache.get(airportCode)==null)){
+//							counter++;
+//						}
+//					}
+//				}
+//				try {
+//					Thread.sleep(500);
+//					System.out.println("runner is sleeping for 0.5 sec...");
+//				} catch (InterruptedException e) {
+//					// TODO Auto-generated catch block
+//					e.printStackTrace();
+//				}
+//			}
+//			// mark time ends
+//			long end = System.nanoTime();
+//			long used = end - start;
+//			System.out.println("used timeZone:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");	
+//			System.out.println("Result check: HashMap has "+timeZoneCache.size()+" time zones.");
+//			System.out.println(counter);
+//		}
+//		
+//		/**
+//		 * A helper method to get airport object by airport code
+//		 * @param code
+//		 * @param list
+//		 * @return
+//		 */
+//		private Airport getAirport(String code,List<Airport> list){
+//			for(Airport airport: list){
+//				if(airport.getCode().equals(code)){
+//					return airport;
+//				}
+//			}
+//			return null;
+//		}
+//		
+//	}
+//==========================================================
+	
 	/**
-	 * Stop background thread.
+	 * Get a timeZone string with latitude and longitude of an airport
+	 * 
+	 * Call Google TimeZone API to xml, parse this xml to get timezone string
+	 * 
+	 * @param airport
+	 * @return
 	 */
-	public void stop(){
-		if(runner.isFinished()){
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-			
-				e.printStackTrace();
-			}
-		} else {
-			System.out.println("The process is not finished yet...");
-		}
+	private String timeZoneForAirport(Airport airport){
+		double latitude = airport.getLatitude();
+		double longitude = airport.getLongitude();
+		StringBuffer response = getResponse(latitude, longitude);
+		
+		InputStream input = null;
+	    try
+	    {
+	    	byte[] bytes = response.toString().getBytes();
+	    	input = new ByteArrayInputStream(bytes);
+	    	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();                         
+	    	DocumentBuilder builder = factory.newDocumentBuilder();
+	    	Document doc = builder.parse(input);
+	    	NodeList node = doc.getElementsByTagName("TimeZoneResponse");     
+	    	Element element = (Element) node.item(0);
+	    	String timeZoneId = element.getElementsByTagName("time_zone_id").item(0).getTextContent();
+	    	return timeZoneId;     
+	    }
+	    catch (Exception ex)
+	    {
+	       ex.getStackTrace();
+	       return null;
+	    }
+	    finally
+	    {
+	       try
+	       {
+	          if (input != null)
+	          input.close();
+	       }
+	       catch (IOException ex)
+	       {
+	          ex.getStackTrace();
+	       }
+	    }
 	}
 	
-	// Background thread
-	private class TimeZonePool implements Runnable{
-		private List<Airport> airportList;
-		private int counter;
+	/**
+	 * Get response from Google API with a location
+	 * 
+	 * @param latitude
+	 * @param longitude
+	 * @return
+	 */
+	private StringBuffer getResponse(double latitude, double longitude){
+		// Build query parameters, location and default timestamp
+		String locationPar = "location=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
+		String timeStampPar = "&timestamp=1331161200";
+		StringBuffer response = new StringBuffer();
 		
-		// Called by other to know if background thread is finished.
-		public boolean isFinished(){
-			if(counter==airportList.size()){
-				return true;
-			} else{
-				return false;
-			}
-		}
-		
-		@Override
-		public void run(){
-			//mark time starts...
-			long start1 = System.nanoTime();
-
-			AirportParser parser = new AirportParser();
-			this.airportList = parser.start();
-			long end1 = System.nanoTime();
-			long used1 = end1 - start1;
-			System.out.println("used flights:" + TimeUnit.NANOSECONDS.toMillis(used1) + " ms");	
-			long start = System.nanoTime();
-			for(Airport airport: airportList){
-				timeZoneCache.put(airport, null);
-			}
-			this.counter = 0;
-			while(counter<timeZoneCache.size()){
-				for(Airport airport: timeZoneCache.keySet()){
-					if(timeZoneCache.get(airport)==null){
-						String zone = timeZoneForAirport(airport);
-						timeZoneCache.put(airport, zone);
-					}else{
-						counter++;
-					}
-				}
-				try {
-					Thread.sleep(500);
-					System.out.println("runner is sleeping for 0.5 sec...");
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			// mark time ends
-			long end = System.nanoTime();
-			long used = end - start;
-			System.out.println("used timeZone:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");	
-			System.out.println("Result check: HashMap has "+timeZoneCache.size()+" time zones.");
-			for(Airport airport: timeZoneCache.keySet()){
-				System.out.println("Key: "+airport.getCode()+" Value: "+timeZoneCache.get(airport));
-			}
-		}
-		
-		/**
-		 * Get a timeZone string with latitude and longitude of an airport
-		 * 
-		 * Call Google TimeZone API to xml, parse this xml to get timezone string
-		 * 
-		 * @param airport
-		 * @return
-		 */
-		public String timeZoneForAirport(Airport airport){
-			double latitude = airport.getLatitude();
-			double longitude = airport.getLongitude();
-			StringBuffer response = getResponse(latitude, longitude);
+		try{
+			URL url = new URL(baseUrl+locationPar+timeStampPar+KEY);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			//connection.setRequestMethod("GET");
+			int responseCode = connection.getResponseCode();
 			
-			InputStream input = null;
-		    try
-		    {
-		    	byte[] bytes = response.toString().getBytes();
-		    	input = new ByteArrayInputStream(bytes);
-		    	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();                         
-		    	DocumentBuilder builder = factory.newDocumentBuilder();
-		    	Document doc = builder.parse(input);
-		    	NodeList node = doc.getElementsByTagName("TimeZoneResponse");     
-		    	Element element = (Element) node.item(0);
-		    	String timeZoneId = element.getElementsByTagName("time_zone_id").item(0).getTextContent();
-		    	return timeZoneId;     
-		    }
-		    catch (Exception ex)
-		    {
-		       ex.getStackTrace();
-		       return null;
-		    }
-		    finally
-		    {
-		       try
-		       {
-		          if (input != null)
-		          input.close();
-		       }
-		       catch (IOException ex)
-		       {
-		          ex.getStackTrace();
-		       }
-		    }
-		}
-		
-		/**
-		 * Get response from Google API with a location
-		 * 
-		 * @param latitude
-		 * @param longitude
-		 * @return
-		 */
-		private StringBuffer getResponse(double latitude, double longitude){
-			// Build query parameters, location and default timestamp
-			String locationPar = "location=" + String.valueOf(latitude) + "," + String.valueOf(longitude);
-			String timeStampPar = "&timestamp=1331161200";
-			StringBuffer response = new StringBuffer();
-			
-			try{
-				URL url = new URL(baseUrl+locationPar+timeStampPar+KEY);
-				HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-				//connection.setRequestMethod("GET");
-				int responseCode = connection.getResponseCode();
+			if(responseCode == HttpURLConnection.HTTP_OK){
+				InputStream stream = connection.getInputStream();
+				BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+				String buffer;
 				
-				if(responseCode == HttpURLConnection.HTTP_OK){
-					InputStream stream = connection.getInputStream();
-					BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
-					String buffer;
-					
-					while((buffer=reader.readLine())!=null){
-						response.append(buffer);
-					}
-					reader.close();
-					//System.out.println(result.toString());
-					return response;
-				}		
-				return null;	
-			} catch(IOException ioe){
-				ioe.printStackTrace();
-				return null;
-			}
+				while((buffer=reader.readLine())!=null){
+					response.append(buffer);
+				}
+				reader.close();
+				//System.out.println(result.toString());
+				return response;
+			}		
+			return null;	
+		} catch(IOException ioe){
+			ioe.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -215,10 +288,6 @@ public class MyTime{
 	 * @return
 	 */
 	public Calendar gmtToLocal(Calendar gmtCal, Airport airport){	
-		if(!timeZoneCache.containsKey(airport.getCode())){
-//			String timeZone = timeZoneForAirport(airport);
-//			timeZoneCache.put(airport.getCode(), timeZone);
-		}
 		Calendar cal = (Calendar) gmtCal.clone();
 		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
 		cal.setTimeZone(TimeZone.getTimeZone(timeZoneCache.get(airport.getCode())));
@@ -232,10 +301,6 @@ public class MyTime{
 	 * @return
 	 */
 	public Calendar localToGmt(Calendar localCal, Airport airport){
-		if(!timeZoneCache.containsKey(airport.getCode())){
-//			String timeZone = timeZoneForAirport(airport);
-//			timeZoneCache.put(airport.getCode(), timeZone);
-		}
 		Calendar cal = (Calendar) localCal.clone();
 		cal.setTimeZone(TimeZone.getTimeZone(timeZoneCache.get(airport.getCode())));
 		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -249,7 +314,7 @@ public class MyTime{
 	 * @param calSec
 	 * @return
 	 */
-	public static double getInterval(Calendar calFir, Calendar calSec){
+	public double getInterval(Calendar calFir, Calendar calSec){
 		final int SECOND = 1000;
 		final int MINUTE = 60 * SECOND;
 		final int HOUR = 60 * MINUTE;

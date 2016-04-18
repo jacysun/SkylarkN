@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import controller.AirportParser;
 import controller.FlightParser;
+import controller.ItineraryBuilder;
 import controller.MyTime;
 import model.Airport;
 import model.Flight;
@@ -29,6 +30,21 @@ public class Test {
 //		System.out.println("local: "+ localCal.getTime());
 //		System.out.println("gmt: "+ depDateString);
 		MyTime m = new MyTime();
+		ItineraryBuilder builder = new ItineraryBuilder(m);
+//		try {
+//			TimeUnit.SECONDS.sleep(10);
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		for(String code: m.getTimeZones().keySet()){
+			System.out.println("Key: "+code+" Value: "+m.getTimeZones().get(code));
+		}
+//		m.stop();
+//		AirportParser parser = new AirportParser();
+//		List<Airport> airports = parser.start();
+//		Airport startAirport = airports.get(8);
+		//System.out.println("Key: " + startAirport.getCode()+" time Zone: "+ m.timeZoneCache.get(startAirport.getCode()));
 	}
 
 }
