@@ -97,8 +97,8 @@ if (ol != null) {
                 <div class="col-xs-12 col-sm-8">
         	    <table width="100%" id="flight" style="display: inline-block; padding: 5px;">
         	    <% for (int j = 0; j < olp.get(i).getFlights().size(); j++) { %>
-                  <tr><td width="50%" align="right" valign="middle"><span><%=olp.get(i).getFlights().get(j).getDepartTime() %> <%=olp.get(i).getFlights().get(j).getDepartCode() %> </span></td>
-                      <td width="50%" align="left" valign="middle"><span> ---> <%=olp.get(i).getFlights().get(j).getArrivalTime() %> <%=olp.get(i).getFlights().get(j).getArrivalCode() %></span></td></tr>
+                  <tr><td width="50%" align="right" valign="middle"><span><%=olp.get(i).getFlights().get(j).getDepLocal() %> <%=olp.get(i).getFlights().get(j).getDepartCode() %> </span></td>
+                      <td width="50%" align="left" valign="middle"><span> ---> <%=olp.get(i).getFlights().get(j).getArrLocal() %> <%=olp.get(i).getFlights().get(j).getArrivalCode() %></span></td></tr>
                  <% } %>
                 </table>
                 </div>
@@ -107,7 +107,7 @@ if (ol != null) {
                   <summary>Itinerary Details</summary>
                   <p>Depart --- WWW, MMM dd (placeholder)</p><hr>
                   <% for (int j = 0; j < olp.get(i).getFlights().size(); j++) { %>
-                  <p><%=olp.get(i).getFlights().get(j).getDepartTime() %> --- <%=olp.get(i).getFlights().get(j).getArrivalTime() %></p>
+                  <p><%=olp.get(i).getFlights().get(j).getDepLocal() %> --- <%=olp.get(i).getFlights().get(j).getArrLocal() %></p>
                   <p><%=olp.get(i).getFlights().get(j).getDepartCode() %> --- <%=olp.get(i).getFlights().get(j).getArrivalCode() %> (<%=olp.get(i).getFlights().get(j).getDuration() %> hr)</p>
                   <p>Airplane:<%=olp.get(i).getFlights().get(j).getAirplane() %><span style="position:relative; left: 50px;">Flight No:<%=olp.get(i).getFlights().get(j).getNumber() %></span></p>
                   <% double interval = 0;
@@ -150,10 +150,10 @@ if (ol != null) {
         	    <table width="100%" id="flight" style="display: inline-block; padding: 5px;">
         	    <% int depSize = rlp.get(i).getDepItinerary().getFlights().size();
         	       int retSize = rlp.get(i).getRetItinerary().getFlights().size(); %>
-                  <tr><td width="50%" align="right" valign="middle"><span><%=rlp.get(i).getDepItinerary().getFlights().get(0).getDepartTime() %> <%=rlp.get(i).getDepItinerary().getFlights().get(0).getDepartCode() %> </span></td>
-                      <td width="50%" align="left" valign="middle"><span> ---> <%=rlp.get(i).getDepItinerary().getFlights().get(depSize-1).getArrivalTime() %> <%=rlp.get(i).getDepItinerary().getFlights().get(depSize-1).getArrivalCode() %></span></td></tr>
-                  <tr><td width="50%" align="right" valign="middle"><span><%=rlp.get(i).getRetItinerary().getFlights().get(0).getDepartTime() %> <%=rlp.get(i).getRetItinerary().getFlights().get(0).getDepartCode() %> </span></td>
-                      <td width="50%" align="left" valign="middle"><span> ---> <%=rlp.get(i).getRetItinerary().getFlights().get(retSize-1).getArrivalTime() %> <%=rlp.get(i).getRetItinerary().getFlights().get(retSize-1).getArrivalCode() %></span></td></tr>
+                  <tr><td width="50%" align="right" valign="middle"><span><%=rlp.get(i).getDepItinerary().getFlights().get(0).getDepLocal() %> <%=rlp.get(i).getDepItinerary().getFlights().get(0).getDepartCode() %> </span></td>
+                      <td width="50%" align="left" valign="middle"><span> ---> <%=rlp.get(i).getDepItinerary().getFlights().get(depSize-1).getArrLocal() %> <%=rlp.get(i).getDepItinerary().getFlights().get(depSize-1).getArrivalCode() %></span></td></tr>
+                  <tr><td width="50%" align="right" valign="middle"><span><%=rlp.get(i).getRetItinerary().getFlights().get(0).getDepLocal() %> <%=rlp.get(i).getRetItinerary().getFlights().get(0).getDepartCode() %> </span></td>
+                      <td width="50%" align="left" valign="middle"><span> ---> <%=rlp.get(i).getRetItinerary().getFlights().get(retSize-1).getArrLocal() %> <%=rlp.get(i).getRetItinerary().getFlights().get(retSize-1).getArrivalCode() %></span></td></tr>
                 </table>
                 </div>
               </div>
@@ -161,7 +161,7 @@ if (ol != null) {
                   <summary>Itinerary Details</summary>
                   <p>Depart --- WWW, MMM dd (placeholder)</p><hr>
                   <% for (int j = 0; j < rlp.get(i).getDepItinerary().getFlights().size(); j++) { %>
-                  <p><%=rlp.get(i).getDepItinerary().getFlights().get(j).getDepartTime() %> --- <%=rlp.get(i).getDepItinerary().getFlights().get(j).getArrivalTime() %></p>
+                  <p><%=rlp.get(i).getDepItinerary().getFlights().get(j).getDepLocal() %> --- <%=rlp.get(i).getDepItinerary().getFlights().get(j).getArrLocal() %></p>
                   <p><%=rlp.get(i).getDepItinerary().getFlights().get(j).getDepartCode() %> --- <%=rlp.get(i).getDepItinerary().getFlights().get(j).getArrivalCode() %> (<%=rlp.get(i).getDepItinerary().getFlights().get(j).getDuration() %> hr)</p>
                   <p>Airplane:<%=rlp.get(i).getDepItinerary().getFlights().get(j).getAirplane() %><span style="position:relative; left: 50px;">Flight No:<%=rlp.get(i).getDepItinerary().getFlights().get(j).getNumber() %></span></p>
                   <% double interval = 0;
@@ -174,7 +174,7 @@ if (ol != null) {
                  <%} %>
                  <hr><p>Return --- WWW, MMM dd (placeholder)</p><hr>
                   <% for (int j = 0; j < rlp.get(i).getRetItinerary().getFlights().size(); j++) { %>
-                  <p><%=rlp.get(i).getRetItinerary().getFlights().get(j).getDepartTime() %> --- <%=rlp.get(i).getRetItinerary().getFlights().get(j).getArrivalTime() %></p>
+                  <p><%=rlp.get(i).getRetItinerary().getFlights().get(j).getDepLocal() %> --- <%=rlp.get(i).getRetItinerary().getFlights().get(j).getArrLocal() %></p>
                   <p><%=rlp.get(i).getRetItinerary().getFlights().get(j).getDepartCode() %> --- <%=rlp.get(i).getRetItinerary().getFlights().get(j).getArrivalCode() %> (<%=rlp.get(i).getRetItinerary().getFlights().get(j).getDuration() %> hr)</p>
                   <p>Airplane:<%=rlp.get(i).getRetItinerary().getFlights().get(j).getAirplane() %><span style="position:relative; left: 50px;">Flight No:<%=rlp.get(i).getRetItinerary().getFlights().get(j).getNumber() %></span></p>
                   <% double interval = 0;
