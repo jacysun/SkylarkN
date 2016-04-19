@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import model.Itinerary;
+import model.Itinerary.RoundTripItinerary;
 
 /**
  * Servlet implementation class RequestFlight 
@@ -36,66 +37,36 @@ public class RequestFlight extends HttpServlet {
 		
 		request.getSession().setAttribute("seatType", seatType);
 		
-		ArrayList<Itinerary> itineraryList = new ArrayList<Itinerary>();
+		ArrayList<Itinerary> oneWayList = new ArrayList<Itinerary>();
+		ArrayList<RoundTripItinerary> roundTripList = new ArrayList<RoundTripItinerary>();
 		Itinerary itinerary = new Itinerary();
 		if (trip.equals("one-way")) {
 			try {
-				itineraryList = itinerary.getItineraryList(from, to, depart, true, seatType);
-				if (itineraryList == null) {
-					dispatcher = request.getRequestDispatcher("inputError.jsp");
-					dispatcher.forward(request, response);
-				} else {
-					request.getSession().setAttribute("itineraryList", itineraryList);
-					dispatcher = request.getRequestDispatcher("searchOneWay.jsp");
-					dispatcher.forward(request, response);
-				}
+				oneWayList = itinerary.getOneWayList(from, to, depart, seatType);
+				roundTripList = null;
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
-		} else {
+		} else if (trip.equals("round-trip")) {
 			try {
-				itineraryList = itinerary.getItineraryList(from, to, depart, false, seatType);
-				if (itineraryList == null) {
-					dispatcher = request.getRequestDispatcher("inputError.jsp");
-					dispatcher.forward(request, response);
-				} else {
-					request.getSession().setAttribute("itineraryList", itineraryList);
-					dispatcher = request.getRequestDispatcher("searchRoundTrip.jsp");
-					dispatcher.forward(request, response);
-				}
+				String retur = request.getParameter("return");
+				roundTripList = itinerary.getRoundTripList(from, to, depart, seatType, retur);
+				oneWayList = null;
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		}
-		
-		/*SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-		Calendar depDate = Calendar.getInstance();
-		try {
-			depDate.setTime(formatter.parse(depart));
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
-		Airport departure = new Airport();
-		departure = departure.getAirport(from);
-		Airport arrival = new Airport();
-		arrival = arrival.getAirport(to);
-		if (departure == null || arrival == null) {
+				
+		if (oneWayList == null && roundTripList == null) {
 			dispatcher = request.getRequestDispatcher("inputError.jsp");
 			dispatcher.forward(request, response);
+		} else {
+			request.getSession().setAttribute("oneWayList", oneWayList);
+			request.getSession().setAttribute("roundTripList", roundTripList);
+			dispatcher = request.getRequestDispatcher("searchResult.jsp");
+			dispatcher.forward(request, response);
 		}
-		
-		ItineraryBuilder ib = new ItineraryBuilder();
-		List<Schedule> scheduleList = new ArrayList<Schedule>();
-		if (trip.equals("one-way")) {
-			scheduleList = ib.oneWayTrip(departure, arrival, depDate, 2);
-		//} else {
-		//	scheduleList = ib.roundWayTrip(departure, arrival, depDate, 2);
-		}
-		
-		request.getSession().setAttribute("scheduleList", scheduleList);
-		dispatcher = request.getRequestDispatcher("searchResult.jsp");
-		dispatcher.forward(request, response);*/
+
 	}
 }
 

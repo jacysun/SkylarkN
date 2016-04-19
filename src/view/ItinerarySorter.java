@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import model.Itinerary;
+import model.Itinerary.RoundTripItinerary;
 
 public class ItinerarySorter {
 	
@@ -67,6 +68,69 @@ public class ItinerarySorter {
 		if (largest != i) {
 			Collections.swap(il, i, largest);
 			maxDuration(il, size, largest);
+		}
+	}
+	
+	// Sort RoundTripList
+	public ArrayList<RoundTripItinerary> sortByprice(ArrayList<RoundTripItinerary> il) {
+		int size = il.size();
+		for (int i = (il.size()-1)/2; i >= 0; i--) {
+			maxprice(il, size, i);
+		}
+		for (int i = il.size() - 1; i >= 1; i--) {
+			Collections.swap(il, i, 0);
+			size = size - 1;
+			maxprice(il, size, 0);
+		}
+		return il;
+	}
+	
+	public ArrayList<RoundTripItinerary> sortByduration(ArrayList<RoundTripItinerary> il) {
+		int size = il.size();
+		for (int i = (il.size()-1)/2; i >= 0; i--) {
+			maxduration(il, size, i);
+		}
+		for (int i = il.size()-1; i >= 1; i--) {
+			Collections.swap(il, i, 0);
+			size = size - 1;
+			maxduration(il, size, 0);
+		}
+		return il;
+	}
+	
+	public void maxprice(ArrayList<RoundTripItinerary> il, int size, int i) {
+		int largest = 0;
+		int left = 2*i + 1;
+		int right = 2*i + 2;
+		if (left < size && Double.compare(il.get(left).getTotalPrice(), il.get(i).getTotalPrice()) > 0) {
+			largest = left;
+		} else {
+			largest = i;
+		}
+		if (right < size && Double.compare(il.get(right).getTotalPrice(), il.get(largest).getTotalPrice()) > 0) {
+			largest = right;
+		}
+		if (largest != i) {
+			Collections.swap(il, i, largest);
+			maxprice(il, size, largest);
+		}
+	}
+	
+	public void maxduration(ArrayList<RoundTripItinerary> il, int size, int i) {
+		int largest = 0;
+		int left = 2*i + 1;
+		int right = 2*i + 2;
+		if (left < size && Double.compare(il.get(left).getDuration(), il.get(i).getDuration()) > 0) {
+			largest = left;
+		} else {
+			largest = i;
+		}
+		if (right < size && Double.compare(il.get(right).getDuration(), il.get(largest).getDuration()) > 0) {
+			largest = right;
+		}
+		if (largest != i) {
+			Collections.swap(il, i, largest);
+			maxduration(il, size, largest);
 		}
 	}
 	
