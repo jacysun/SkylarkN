@@ -7,7 +7,7 @@
     <title>Skylark</title>
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/bootstrap-theme.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+    <link rel="stylesheet" href="css/jquery-ui.min.css">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
   </head>
@@ -53,9 +53,9 @@
          <label><input id="roundTrip" type="radio" name="trip" value="round-trip" onchange="checkReturn()">Round-trip</label><br>
          <p></p>
          <label for='from'>From</label>
-         <input type='text' id='from' name='from' placeholder="e.g. BOS" pattern="[A-Z]{3}" required>
+         <input type='text' id='from' name='from' placeholder="e.g. BOS" pattern="[A-Z]{3}" required onchange="checkFrom()">
          <label for='to'>To</label>
-         <input type='text' id='to' name='to' placeholder="e.g. LAX" pattern="[A-Z]{3}" required><br>
+         <input type='text' id='to' name='to' placeholder="e.g. LAX" pattern="[A-Z]{3}" required onchange="checkTo()"><br>
          <p></p>
          <label for='depart'>Depart</label>
          <input type='date' id='depart' name='depart' required>
@@ -99,8 +99,8 @@
   </footer>
 
   <script src="js/jquery-2.1.4.min.js"></script>
+  <script src="js/jquery-ui.min.js"></script>
   <script src="js/bootstrap.min.js"></script>
   <script src="js/script.js"></script>
-  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
 </body>
 </html>

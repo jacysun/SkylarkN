@@ -18,6 +18,7 @@ public class ItineraryBuilder {
 	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
 	private MyTime myTime;
 	
+	
 	/**
 	 * Constructor, initialize airportCache and time converter
 	 */
