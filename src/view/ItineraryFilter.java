@@ -38,25 +38,54 @@ public class ItineraryFilter {
 		ArrayList<RoundTripItinerary> non = new ArrayList<RoundTripItinerary>();
 		ArrayList<RoundTripItinerary> one = new ArrayList<RoundTripItinerary>();
 		ArrayList<RoundTripItinerary> two = new ArrayList<RoundTripItinerary>();
+		ArrayList<RoundTripItinerary> nonone = new ArrayList<RoundTripItinerary>();
+		ArrayList<RoundTripItinerary> onetwo = new ArrayList<RoundTripItinerary>();
+		ArrayList<RoundTripItinerary> nontwo = new ArrayList<RoundTripItinerary>();
+		
 		for (int i = 0; i < il.size(); i++) {
-			if (il.get(i).getDepItinerary().getStopNum() == 0 || il.get(i).getRetItinerary().getStopNum() == 0) {
+			int depStop = il.get(i).getDepItinerary().getStopNum();
+			int retStop = il. get(i).getRetItinerary().getStopNum();
+			if (depStop == 0 && retStop == 0) {
 				non.add(il.get(i));
-			} else if (il.get(i).getDepItinerary().getStopNum() == 1 || il.get(i).getRetItinerary().getStopNum() == 1) {
+			} else if (depStop == 1 && retStop == 1) {
 				one.add(il.get(i));
-			} else if (il.get(i).getDepItinerary().getStopNum() == 2 || il.get(i).getRetItinerary().getStopNum() == 2) {
+			} else if (depStop == 2 && retStop == 2) {
 				two.add(il.get(i));
+			} else if ((depStop == 0 && retStop == 1) || (depStop == 1 && retStop == 0)) {
+				nonone.add(il.get(i));
+			} else if ((depStop == 1 && retStop == 2) || (depStop == 2 && retStop == 1)) {
+				onetwo.add(il.get(i));
+			} else if ((depStop == 0 && retStop == 2) || (depStop == 2 && retStop == 0)) {
+				nontwo.add(il.get(i));
 			}
 		}
-		if (nonstop) {
-			fil.addAll(non);
+		nonone.addAll(non);
+		nonone.addAll(one);
+		onetwo.addAll(one);
+		onetwo.addAll(two);
+		nontwo.addAll(non);
+		nontwo.addAll(two);
+		
+		if(nonstop == true && onestop == true && twostop == true) {
+			return il;
+		} else { 
+			if (nonstop == true && onestop == true) {
+			   fil = nonone;
+		    } else if (nonstop == true && twostop == true) {
+			   fil = nontwo;
+		    } else if (onestop == true && twostop == true) {
+			   fil = onetwo;
+		    } else {
+		    	if (nonstop == true) {
+			       fil = non;
+		      } else if (onestop == true) {
+			       fil = one;
+		      } else if (twostop == true) {
+			       fil = two;
+		      }
+		    }
+		    return fil;	
 		}
-		if (onestop) {
-			fil.addAll(one);
-		}
-		if (twostop) {
-			fil.addAll(two);
-		}
-		return fil;	
 	}
 }
 

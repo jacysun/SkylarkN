@@ -71,9 +71,9 @@ public class Itinerary {
 			} else {
 				ItineraryBuilder ib = new ItineraryBuilder(myTime);
 				List<Schedule> scheduleList = new ArrayList<Schedule>();
-				if (seatType.equals("coach")) {
+				if (seatType.equals("Coach")) {
 					scheduleList = ib.oneWayTrip(departure, arrival, depart, 2, true);
-				} else if (seatType.equals("firstclass")){
+				} else if (seatType.equals("FirstClass")){
 					scheduleList = ib.oneWayTrip(departure, arrival, depart, 2, false);
 				}
 				for (int i = 0; i < scheduleList.size(); i++) {
@@ -83,10 +83,10 @@ public class Itinerary {
 					 double totalPrice = 0;
 					for (int j = 0; j < flights.size(); j++) {
 						duration += flights.get(j).getDuration();
-						if (seatType.equals("coach")) {
+						if (seatType.equals("Coach")) {
 							totalPrice += flights.get(j).getCoachPrice();
 							System.out.println((j+1) + "leg price: " + flights.get(j).getCoachPrice() + " duration: " + flights.get(j).getDuration());
-						} else if (seatType.equals("firstclass")) {
+						} else if (seatType.equals("FirstClass")) {
 							totalPrice += flights.get(j).getFirstClassPrice();
 						}
 					}
@@ -169,9 +169,9 @@ public class Itinerary {
 			return null;
 		} else {
 			ItineraryBuilder ib = new ItineraryBuilder(myTime);
-			if (seatType.equals("coach")) {
+			if (seatType.equals("Coach")) {
 				roundList = ib.roundTrip(departure, arrival, depart, 2, true, retur);
-			} else if (seatType.equals("firstclass")) {
+			} else if (seatType.equals("FirstClass")) {
 				roundList = ib.roundTrip(departure, arrival, depart, 2, false, retur);				
 			}
 			for (int i = 0; i < roundList.size(); i++) {
@@ -190,10 +190,10 @@ public class Itinerary {
 			    System.out.println("Departure Itinerary:");
 				for (int j = 0; j < depList.size(); j++) {
 					depDuration += depList.get(j).getDuration();
-					if (seatType.equals("coach")) {
+					if (seatType.equals("Coach")) {
 						depTotalPrice += depList.get(j).getCoachPrice();
 						System.out.println((j+1) + "leg price: " + depList.get(j).getCoachPrice() + " duration: " + depList.get(j).getDuration());
-					} else if (seatType.equals("firstclass")) {
+					} else if (seatType.equals("FirstClass")) {
 						depTotalPrice += depList.get(j).getFirstClassPrice();
 					}
 				}
@@ -207,6 +207,7 @@ public class Itinerary {
 					System.out.println((k+1) + "interval: " + myTime.getInterval(arr, dep));
 				}
 				depDuration = depDuration + depInterval;
+				depDuration = Math.floor(depDuration*100)/100;
 				System.out.println("total duration: " + depDuration) ;
 				System.out.println("---------------");
 	            depItinerary = new Itinerary(depStopNum, depDuration, depTotalPrice, depList, seatType);
@@ -215,10 +216,10 @@ public class Itinerary {
 	            System.out.println("Return Itinerary:");
 	            for (int j = 0; j < retList.size(); j++) {
 					retDuration += retList.get(j).getDuration();
-					if (seatType.equals("coach")) {
+					if (seatType.equals("Coach")) {
 						retTotalPrice += retList.get(j).getCoachPrice();
 						System.out.println((j+1) + "leg price: " + retList.get(j).getCoachPrice() + " duration: " + retList.get(j).getDuration());
-					} else if (seatType.equals("firstclass")) {
+					} else if (seatType.equals("FirstClass")) {
 						retTotalPrice += retList.get(j).getFirstClassPrice();
 					}
 				}
@@ -231,6 +232,7 @@ public class Itinerary {
 					System.out.println((k+1) + "interval: " + myTime.getInterval(arr, dep));
 				}
 				retDuration = retDuration + retInterval;
+				retDuration = Math.floor(retDuration*100)/100;
 				System.out.println("total duration: " + retDuration) ;
 				System.out.println("---------------");
 	            retItinerary = new Itinerary(retStopNum, retDuration, retTotalPrice, retList, seatType);
@@ -245,8 +247,8 @@ public class Itinerary {
 		    return roundTripList;
 		}
 	}
- 	public static void main(String[] args) throws ParseException {
-		/*ArrayList<Itinerary> ol = new ArrayList<Itinerary>();
+ 	/*public static void main(String[] args) throws ParseException {
+		ArrayList<Itinerary> ol = new ArrayList<Itinerary>();
 		Itinerary itinerary = new Itinerary();
 		ol = itinerary.getOneWayList("BOS", "SFO", "2016-05-12", "coach");
 		for (int i = 0; i < ol.size(); i++) {
@@ -255,7 +257,7 @@ public class Itinerary {
 				System.out.println(flights.get(j).getDepartCode() + " --> " + flights.get(j).getArrivalCode());
 				System.out.println(flights.get(j).getDepartTime() + " --> " + flights.get(j).getArrivalTime());
 			}
-		}*/
+		}
  		Itinerary itinerary = new Itinerary();
  		ArrayList<RoundTripItinerary> rl = new ArrayList<RoundTripItinerary>();
  		rl = itinerary.getRoundTripList("BOS", "SFO", "2016-05-12", "coach", "2016-05-13");
@@ -273,8 +275,7 @@ public class Itinerary {
 				System.out.println(retList.get(k).getDepartTime() + " --> " + retList.get(k).getArrivalTime());
  			}
  		}
-	
-	}
+	}*/
 }
 
 

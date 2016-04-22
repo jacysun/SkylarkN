@@ -18,8 +18,8 @@ import model.Itinerary.RoundTripItinerary;
  * Servlet implementation class RequestFlight 
  * This class is used to interact with UI and return itinerary result.
  */
-@WebServlet("/RequestFlight")
-public class RequestFlight extends HttpServlet {
+@WebServlet("/FlightSearcher")
+public class FlightSearcher extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -36,6 +36,8 @@ public class RequestFlight extends HttpServlet {
 		String seatType = request.getParameter("seat type");
 		
 		request.getSession().setAttribute("seatType", seatType);
+		request.getSession().setAttribute("depart", depart);
+		String retur = null;
 		
 		ArrayList<Itinerary> oneWayList = new ArrayList<Itinerary>();
 		ArrayList<RoundTripItinerary> roundTripList = new ArrayList<RoundTripItinerary>();
@@ -44,29 +46,33 @@ public class RequestFlight extends HttpServlet {
 			try {
 				oneWayList = itinerary.getOneWayList(from, to, depart, seatType);
 				roundTripList = null;
+				if (oneWayList == null) {
+					dispatcher = request.getRequestDispatcher("searchError.jsp");
+					dispatcher.forward(request, response);
+				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		} else if (trip.equals("round-trip")) {
 			try {
-				String retur = request.getParameter("return");
+				retur = request.getParameter("return");
 				roundTripList = itinerary.getRoundTripList(from, to, depart, seatType, retur);
 				oneWayList = null;
+				if (roundTripList == null) {
+					dispatcher = request.getRequestDispatcher("searchError.jsp");
+					dispatcher.forward(request, response);
+				}
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 		}
-				
-		if (oneWayList == null && roundTripList == null) {
-			dispatcher = request.getRequestDispatcher("inputError.jsp");
-			dispatcher.forward(request, response);
-		} else {
-			request.getSession().setAttribute("oneWayList", oneWayList);
-			request.getSession().setAttribute("roundTripList", roundTripList);
-			dispatcher = request.getRequestDispatcher("searchResult.jsp");
-			dispatcher.forward(request, response);
-		}
+		request.getSession().setAttribute("retur", retur);	
+		request.getSession().setAttribute("oneWayList", oneWayList);
+		request.getSession().setAttribute("roundTripList", roundTripList);
+		dispatcher = request.getRequestDispatcher("searchResult.jsp");
+		dispatcher.forward(request, response);
 
 	}
 }
+
 

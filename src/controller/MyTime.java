@@ -404,5 +404,39 @@ public class MyTime{
       return time;
 	}
 	
+	public String detailDate(String date) {
+		int mm = Integer.parseInt(date.substring(5, 7));
+		String month;
+		switch (mm) {
+		case 1: month = "JAN";
+				break;
+		case 2: month = "FEB";
+				break;
+		case 3: month = "MAR";
+				break;
+		case 4: month = "APR";
+				break;
+		case 5: month = "MAY";
+				break;
+		case 6: month = "JUN";
+				break;
+		case 7: month = "JUL";
+				break;
+		case 8: month = "AUG";
+				break;
+		case 9: month = "SEP";
+				break;
+		case 10: month = "OCT";
+				break;
+		case 11: month = "NOV";
+				break;
+		case 12: month = "DEC";
+				break;
+		default: month = "Invalid";
+				break;
+		}
+				
+		return month + " " + date.substring(8) + ", " + date.substring(0,4);
+	}
 }
 

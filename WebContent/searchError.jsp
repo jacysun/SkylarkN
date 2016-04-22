@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="css/jquery-ui.min.css">
     <link href="css/style.css" rel="stylesheet" type="text/css" media="screen">
     <link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
+    <script>alert("No available flights. Please change the search criteria.");</script>
   </head>
 
 <body>
