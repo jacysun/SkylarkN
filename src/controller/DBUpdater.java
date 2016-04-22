@@ -10,8 +10,10 @@ import java.net.URL;
 /**
  * This class contains methods to lock and unlock the database.
  * Also contains method to update seat information in the database after the seat is reserved.
+ * Return the detailed information of the itinerary customer has reserved, including flight information and seat information of each leg.
+ * Update the database on available flights and seats.
  */
-public class AccessDatabase {
+public class DBUpdater {
 	
 	private final String mUrlBase = "http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem";
 	
@@ -23,7 +25,7 @@ public class AccessDatabase {
 	 * @param team identifies the ticket agency requesting the lock
 	 * @return true if the database is successfully locked, otherwise return false
 	 */
-	public boolean lock (String team) {
+	public boolean lock () {
 		URL url;
 		HttpURLConnection connection;
 
@@ -31,10 +33,10 @@ public class AccessDatabase {
 			url = new URL(mUrlBase);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
-			connection.setRequestProperty("User-Agent", team);
+			connection.setRequestProperty("User-Agent", "Team06");
 			connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 			
-			String params = QueryFactory.lock(team);
+			String params = "team=Team06&action=lockDB";
 			
 			connection.setDoOutput(true);
 			DataOutputStream writer = new DataOutputStream(connection.getOutputStream());
@@ -72,7 +74,7 @@ public class AccessDatabase {
 	 * @param team identifies the ticket agency requesting the unlock
 	 * @return true if the dabatase is successfully unlocked, otherwise return false
 	 */
-	public boolean unlock (String team) {
+	public boolean unlock () {
 		URL url;
 		HttpURLConnection connection;
 		
@@ -80,8 +82,10 @@ public class AccessDatabase {
 			url = new URL(mUrlBase);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
+			connection.setRequestProperty("User-Agent", "Team06");
+			connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 			
-			String params = QueryFactory.unlock(team);
+			String params = "team=Team06&action=unlockDB";
 			
 			connection.setDoOutput(true);
 			connection.setDoInput(true);
@@ -127,7 +131,7 @@ public class AccessDatabase {
 	 * @param team identifies the ticket agency requesting for the seat update
 	 * @return true if the seat information is successfully updated in the database, otherwise return false
 	 */
-	public boolean reserveSeat(String team, String xmlReservation) {
+	public boolean reserveSeat(String number, String seatType) {
 		URL url;
 		HttpURLConnection connection;
 
@@ -135,8 +139,10 @@ public class AccessDatabase {
 			url = new URL(mUrlBase);
 			connection = (HttpURLConnection) url.openConnection();
 			connection.setRequestMethod("POST");
+			connection.setRequestProperty("User-Agent", "Team06");
+			connection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 
-			String params = QueryFactory.reserve(team, xmlReservation);
+			String params = "team=Team06&action=buyTickets&flightData=<Flights><Flight number='" + number + "' seating='" + seatType + "'/></Flights>";
 
 			System.out.println("\nSending 'POST' to ReserveFlights");
 			System.out.println("\nSending " + params);
@@ -189,3 +195,4 @@ public class AccessDatabase {
 		}
 	}
 }
+

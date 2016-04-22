@@ -18,7 +18,7 @@
 <link href="css/pagination.css" rel="stylesheet" type="text/css" >
 <link rel="stylesheet" href="css/jquery-ui.min.css">
 <link href='https://fonts.googleapis.com/css?family=Oxygen:400,300,700' rel='stylesheet' type='text/css'>
-
+<script>alert("Seats are not available in one or more of the flights in your itinerary. Please select another itinerary.");</script>
 </head>
 <body>
 <header>
@@ -52,27 +52,8 @@
 <%
 ArrayList<Itinerary> fol = (ArrayList<Itinerary>) session.getAttribute("oneWayList");
 ArrayList<RoundTripItinerary> frl = (ArrayList<RoundTripItinerary>) session.getAttribute("roundTripList");
-ArrayList<Itinerary> ol = null;
-ArrayList<RoundTripItinerary> rl = null;
-request.getSession().setAttribute("ol", ol);
-request.getSession().setAttribute("rl", rl);
 String seatType = (String) session.getAttribute("seatType");
-String depart = (String) session.getAttribute("depart");
-String retur = (String) session.getAttribute("retur");
-boolean nonstop = true;
-boolean onestop = true;
-boolean twostop = true;
-request.getSession().setAttribute("nonstop", nonstop);
-request.getSession().setAttribute("onestop", onestop);
-request.getSession().setAttribute("twostop", twostop);
 MyTime myTime = new MyTime();
-String depDate = myTime.detailDate(depart);
-String retDate = null;
-if (retur != null) {
-	retDate = myTime.detailDate(retur);
-}
-request.getSession().setAttribute("depDate", depDate);
-request.getSession().setAttribute("retDate", retDate);
 %>
 
 <div id="result" class="container">
@@ -114,7 +95,7 @@ request.getSession().setAttribute("retDate", retDate);
               </div>
               <details>
                 <summary>Itinerary Details</summary>
-                <p>Depart --- <%=depDate %></p><hr>
+                <p>Depart --- WWW, MMM dd (placeholder)</p><hr>
                 <% double[] intervals = new double[2];
                 for (int j = 0; j < fol.get(i).getFlights().size(); j++) { %>
                   <p><%=fol.get(i).getFlights().get(j).getDepLocal() %> --- <%=fol.get(i).getFlights().get(j).getArrLocal() %></p>
@@ -177,7 +158,7 @@ request.getSession().setAttribute("retDate", retDate);
               </div>
               <details>
                   <summary>Itinerary Details</summary>
-                  <p>Depart --- <%=depDate %></p><hr>
+                  <p>Depart --- WWW, MMM dd (placeholder)</p><hr>
                   <% double[] dintervals = new double[2];
                   for (int j = 0; j < frl.get(i).getDepItinerary().getFlights().size(); j++) { %>
                   <p><%=frl.get(i).getDepItinerary().getFlights().get(j).getDepLocal() %> --- <%=frl.get(i).getDepItinerary().getFlights().get(j).getArrLocal() %></p>
@@ -192,7 +173,7 @@ request.getSession().setAttribute("retDate", retDate);
 					dintervals[j] = interval;%>
                   <hr><p>Change Plane <%=interval %> hr</p><hr> <%} %>
                  <%} %>
-                 <hr><p>Return --- <%=retDate %></p><hr>
+                 <hr><p>Return --- WWW, MMM dd (placeholder)</p><hr>
                   <% double[] rintervals = new double[2];
                   for (int j = 0; j < frl.get(i).getRetItinerary().getFlights().size(); j++) { %>
                   <p><%=frl.get(i).getRetItinerary().getFlights().get(j).getDepLocal() %> --- <%=frl.get(i).getRetItinerary().getFlights().get(j).getArrLocal() %></p>

@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 
-import controller.AirportParser;
+import controller.DataRetriever;
 
 /**
  * This class holds values pertaining to a single Airport. Class member attributes are
@@ -108,8 +108,8 @@ public class Airport {
 	public Airport getAirport(String code) {
 		Airport airport = new Airport();
 		List<Airport> airportList = new ArrayList<Airport>();
-		AirportParser ap = new AirportParser();
-		airportList = ap.start();
+		DataRetriever dr = new DataRetriever();
+		airportList = dr.getAirports();
 		int i = 0;
 		while (!airportList.get(i).getCode().equals(code) && i < airportList.size()) {
 			i++;

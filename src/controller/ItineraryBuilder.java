@@ -23,8 +23,8 @@ public class ItineraryBuilder {
 	 * Constructor, initialize airportCache and time converter
 	 */
 	public ItineraryBuilder(MyTime time){
-		AirportParser parser = new AirportParser();
-		List<Airport> airports = parser.start();
+		DataRetriever dr = new DataRetriever();
+		List<Airport> airports = dr.getAirports();
 		
 		for(int i=0;i<airports.size();i++){
 			this.airportCache.put(airports.get(i).getCode(), airports.get(i));
@@ -194,9 +194,9 @@ public class ItineraryBuilder {
 				depDateString = format.format(gmtCal.getTime());
 			}
 			// Get flights depart from current airport
-			FlightParser parser = new FlightParser();
+			DataRetriever dr = new DataRetriever();
 			
-			List<Flight> flights = parser.start(currentAirport.getCode(), depDateString);
+			List<Flight> flights = dr.getFlights(currentAirport.getCode(), depDateString);
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){
 					flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);

@@ -1,12 +1,13 @@
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-import controller.AirportParser;
-import controller.FlightParser;
+import controller.DBUpdater;
+import controller.DataRetriever;
 import controller.ItineraryBuilder;
 import controller.ItineraryBuilder.RoundTrip;
 import controller.ItineraryBuilder.Schedule;
@@ -17,7 +18,7 @@ import model.Flight;
 public class Driver {
 
 	public static void main(String[] args) {
-		 itineraryBuilderTest();
+		updateDBTest();
 	}
 
 	/**
@@ -26,8 +27,8 @@ public class Driver {
 	 * ====================================================
 	 */
 	public void timeZoneConverterTest() {
-		AirportParser parser = new AirportParser();
-		List<Airport> airports = parser.start();
+		DataRetriever dt = new DataRetriever();
+		List<Airport> airports = dt.getAirports();
 		Airport testAirport1 = airports.get(3);
 		System.out.println("Test airport1: " + testAirport1.getCode());
 		Airport testAirport2 = airports.get(24);
@@ -50,8 +51,8 @@ public class Driver {
 	 */
 
 	public static void timeZoneCacheTest() {
-		AirportParser parser = new AirportParser();
-		List<Airport> airports = parser.start();
+		DataRetriever dt = new DataRetriever();
+		List<Airport> airports = dt.getAirports();
 		long start = System.nanoTime();
 		MyTime myTime = new MyTime();
 		Calendar cal = Calendar.getInstance();
@@ -96,8 +97,8 @@ public class Driver {
 	 * ====================================================
 	 */
 	public static void itineraryBuilderTest() {
-		AirportParser parser = new AirportParser();
-		List<Airport> airports = parser.start();
+		DataRetriever dt = new DataRetriever();
+		List<Airport> airports = dt.getAirports();
 		Airport startAirport = airports.get(8);
 		System.out.println("startAirport:");
 		airportPrinter(startAirport);
@@ -242,6 +243,25 @@ public class Driver {
 			flightsPrinter(trip.getInBound().getVoyoage());
 			System.out.println("+++++++++++++++++++++++++++");
 		}
+	}
+	
+	public static void updateDBTest() {
+		DataRetriever dt = new DataRetriever();
+		List<Flight> flights = new ArrayList<Flight>();
+		flights = dt.getFlights("BOS", "2016_05_12");
+		String flightNumber = flights.get(0).getNumber();
+		int seatsReservedStart = flights.get(0).getFirstClassSeats();
+		
+		DBUpdater db = new DBUpdater();
+		db.lock();
+		db.reserveSeat(flightNumber, "FirstClass");
+		db.unlock();
+		
+		flights.clear();
+		flights = dt.getFlights("BOS", "2016_05_12");
+		int seatsReservedEnd = flights.get(0).getFirstClassSeats();
+		System.out.println("flight Number: " + flightNumber);
+		System.out.println("seat before: " + seatsReservedStart + "seat after: " + seatsReservedEnd);
 	}
 
 }
