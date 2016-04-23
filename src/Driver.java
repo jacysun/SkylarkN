@@ -18,7 +18,7 @@ import model.Flight;
 public class Driver {
 
 	public static void main(String[] args) {
-		updateDBTest();
+		itineraryBuilderTest();
 	}
 
 	/**
@@ -99,10 +99,10 @@ public class Driver {
 	public static void itineraryBuilderTest() {
 		DataRetriever dt = new DataRetriever();
 		List<Airport> airports = dt.getAirports();
-		Airport startAirport = airports.get(8);
+		Airport startAirport = airports.get(4);
 		System.out.println("startAirport:");
 		airportPrinter(startAirport);
-		Airport destination = airports.get(4);
+		Airport destination = airports.get(1);
 		System.out.println("destination:");
 		airportPrinter(destination);
 		Calendar startCal = Calendar.getInstance();
@@ -123,13 +123,13 @@ public class Driver {
 //		myTime.stop();
 		ItineraryBuilder builder = new ItineraryBuilder(myTime);
 		long start = System.nanoTime();
-		//List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
-		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, returnCal);
+//		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
+		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
 		long end = System.nanoTime();
 		long used = end - start;
 		System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
 		System.out.println(container.size());
-		//schedulePrinter(result);
+//		schedulePrinter(result);
 		roundTripPrinter(container);
 		
 		

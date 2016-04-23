@@ -221,8 +221,7 @@ public class ItineraryBuilder {
 				depDateString = format.format(gmtCal.getTime());
 			}
 			// Get flights depart from current airport
-			DataRetriever dr = new DataRetriever();
-			
+			DataRetriever dr = new DataRetriever();			
 			List<Flight> flights = dr.getFlights(currentAirport.getCode(), depDateString);
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){

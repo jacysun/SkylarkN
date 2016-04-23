@@ -2,6 +2,7 @@ package controller;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -36,12 +37,14 @@ public class DataRetriever {
     public List<Flight> getFlights(String depCode, String depDate) {
     	 List<Flight> flightList = new ArrayList<Flight>();
     	 InputStream inputXml = null;
+    	 File input = null;
     	 try {
-    	     inputXml  = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=departing&airport=" + depCode + "&day=" + depDate).openConnection().getInputStream();
-    	     DocumentBuilderFactory factory = DocumentBuilderFactory.
+//    	     inputXml  = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=departing&airport=" + depCode + "&day=" + depDate).openConnection().getInputStream();
+    	     input = new File("src/"+depCode+"_"+depDate+".xml");
+    		 DocumentBuilderFactory factory = DocumentBuilderFactory.
     	                                        newInstance();
     	     DocumentBuilder builder = factory.newDocumentBuilder();
-    	     Document doc = builder.parse(inputXml);
+    	     Document doc = builder.parse(input);
     	     NodeList flights = doc.getElementsByTagName("Flight");
 
     	     for(int i=0; i<flights.getLength();i++) {
@@ -75,8 +78,8 @@ public class DataRetriever {
     	       catch (IOException ex) {
     	          System.out.println(ex.getMessage());
     	      }
-    	  }
-    	 return flightList;
+    	 }
+		return flightList;
     }
     
     public List<Airport> getAirports() {
