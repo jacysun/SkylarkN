@@ -4,25 +4,30 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.*;
 
+import model.Airplane;
+
 public class PlaneParser
 {
-    public static void main(String[] args) 
-    {
-        try {
-            new PlaneParser().start();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
+//    public static void main(String[] args) 
+//    {
+//        try {
+//            new PlaneParser().start();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    private void start() {
+    public List<Airplane> start() {
     	 InputStream inputXml = null;
+    	 List<Airplane> planeList = new ArrayList<Airplane>();
     	    try
     	    {
     	       inputXml  = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=airplanes").openConnection().getInputStream();
@@ -31,6 +36,7 @@ public class PlaneParser
     	       DocumentBuilder builder = factory.newDocumentBuilder();
     	       Document doc = builder.parse(inputXml);
     	       NodeList planes = doc.getElementsByTagName("Airplane");
+    	       
 
     	       for(int i=0; i<planes.getLength();i++)
     	       {
@@ -38,13 +44,18 @@ public class PlaneParser
     	          String manu = plane.getAttribute("Manufacturer");
     	          String mod = plane.getAttribute("Model");
     	          String fs = plane.getFirstChild().getTextContent();
+    	          int firstSeat = Integer.parseInt(fs);
     	          String cs = plane.getLastChild().getTextContent();
-    	          System.out.println("Manufacturer: " + manu);
-    	          System.out.println("Model: " + mod);
-    	          System.out.println("First Class Seats: " + fs);
-    	          System.out.println("Coach Seats: " + cs);
-    	          System.out.println("-------------------------");
+    	          int coachSeat = Integer.parseInt(cs);
+    	          Airplane airplane = new Airplane(mod,manu,firstSeat,coachSeat);
+    	          planeList.add(airplane);
+//    	          System.out.println("Manufacturer: " + manu);
+//    	          System.out.println("Model: " + mod);
+//    	          System.out.println("First Class Seats: " + fs);
+//    	          System.out.println("Coach Seats: " + cs);
+//    	          System.out.println("-------------------------");
     	        }
+    	       
     	    }
     	    catch (Exception ex)
     	    {
@@ -62,6 +73,7 @@ public class PlaneParser
     	          System.out.println(ex.getMessage());
     	       }
     	    }
+    	    return planeList;
     	 }
     }
 //    private void start() throws Exception
