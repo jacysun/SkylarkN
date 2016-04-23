@@ -7,6 +7,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Queue;
+
+import model.Airplane;
 import model.Airport;
 import model.Flight;
 
@@ -17,6 +19,7 @@ public class ItineraryBuilder {
 	
 	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
 	private MyTime myTime;
+	private List<Airplane> planeList;
 	
 	
 	/**
@@ -25,11 +28,14 @@ public class ItineraryBuilder {
 	public ItineraryBuilder(MyTime time){
 		DataRetriever dr = new DataRetriever();
 		List<Airport> airports = dr.getAirports();
+
 		
 		for(int i=0;i<airports.size();i++){
 			this.airportCache.put(airports.get(i).getCode(), airports.get(i));
 		}
 		this.myTime = time;
+		this.planeList = new ArrayList<Airplane>();
+		this.planeList = dr.getAirplanes();
 	}
 	
 	
@@ -86,6 +92,27 @@ public class ItineraryBuilder {
 				return true;
 			}
 		}
+	}
+	
+	/**
+	 * Check if coach seat is available on this plane  
+	 * 
+	 * @param planeList
+	 * @param flight
+	 * @return return true available
+	 */
+	public boolean coachSeatChecker(Flight flight){
+		
+		for(Airplane plane: this.planeList){
+			if(plane.getModel().equals(flight.getAirplane())){
+				if(plane.getCoachSeats()==flight.getCoachSeats()){
+					return false;
+				}else{
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 	
 	/**
@@ -209,7 +236,7 @@ public class ItineraryBuilder {
 						continue;
 					}
 					// Selected coach seat but not available
-					if(requestCoach&&flightTo.getCoachSeats()==0){
+					if(requestCoach&&!coachSeatChecker(flightTo)){
 						continue;
 					}
 					// Exclude flights arrive later than return date

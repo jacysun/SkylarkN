@@ -18,6 +18,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import model.Airplane;
 import model.Airport;
 import model.Flight;
 
@@ -158,8 +159,9 @@ public class DataRetriever {
 		return airportList;
     }
     
-    private void getAirplanes() {
+    public List<Airplane> getAirplanes() {
    	 InputStream inputXml = null;
+   	 List<Airplane> planeList = new ArrayList<Airplane>();
    	    try
    	    {
    	       inputXml  = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=airplanes").openConnection().getInputStream();
@@ -168,6 +170,7 @@ public class DataRetriever {
    	       DocumentBuilder builder = factory.newDocumentBuilder();
    	       Document doc = builder.parse(inputXml);
    	       NodeList planes = doc.getElementsByTagName("Airplane");
+   	       
 
    	       for(int i=0; i<planes.getLength();i++)
    	       {
@@ -175,13 +178,18 @@ public class DataRetriever {
    	          String manu = plane.getAttribute("Manufacturer");
    	          String mod = plane.getAttribute("Model");
    	          String fs = plane.getFirstChild().getTextContent();
+   	          int firstSeat = Integer.parseInt(fs);
    	          String cs = plane.getLastChild().getTextContent();
-   	          System.out.println("Manufacturer: " + manu);
-   	          System.out.println("Model: " + mod);
-   	          System.out.println("First Class Seats: " + fs);
-   	          System.out.println("Coach Seats: " + cs);
-   	          System.out.println("-------------------------");
+   	          int coachSeat = Integer.parseInt(cs);
+   	          Airplane airplane = new Airplane(mod,manu,firstSeat,coachSeat);
+   	          planeList.add(airplane);
+//   	          System.out.println("Manufacturer: " + manu);
+//   	          System.out.println("Model: " + mod);
+//   	          System.out.println("First Class Seats: " + fs);
+//   	          System.out.println("Coach Seats: " + cs);
+//   	          System.out.println("-------------------------");
    	        }
+   	       
    	    }
    	    catch (Exception ex)
    	    {
@@ -199,5 +207,6 @@ public class DataRetriever {
    	          System.out.println(ex.getMessage());
    	       }
    	    }
+   	    return planeList;
    	 }
 }
