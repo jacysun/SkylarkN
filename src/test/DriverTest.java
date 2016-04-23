@@ -1,3 +1,5 @@
+package test;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -8,14 +10,13 @@ import java.util.concurrent.TimeUnit;
 
 import controller.DBUpdater;
 import controller.DataRetriever;
-import controller.ItineraryBuilder;
-import controller.ItineraryBuilder.RoundTrip;
-import controller.ItineraryBuilder.Schedule;
 import controller.MyTime;
 import model.Airport;
 import model.Flight;
+import test.ItineraryBuilderTest.RoundTrip;
+import test.ItineraryBuilderTest.Schedule;
 
-public class Driver {
+public class DriverTest {
 
 	public static void main(String[] args) {
 		itineraryBuilderTest();
@@ -27,8 +28,8 @@ public class Driver {
 	 * ====================================================
 	 */
 	public void timeZoneConverterTest() {
-		DataRetriever dt = new DataRetriever();
-		List<Airport> airports = dt.getAirports();
+		DataRetrieverTest dr = new DataRetrieverTest();
+		List<Airport> airports = dr.getAirports();
 		Airport testAirport1 = airports.get(3);
 		System.out.println("Test airport1: " + testAirport1.getCode());
 		Airport testAirport2 = airports.get(24);
@@ -97,12 +98,12 @@ public class Driver {
 	 * ====================================================
 	 */
 	public static void itineraryBuilderTest() {
-		DataRetriever dt = new DataRetriever();
-		List<Airport> airports = dt.getAirports();
-		Airport startAirport = airports.get(8);
+		DataRetrieverTest dtt = new DataRetrieverTest();
+		List<Airport> airports = dtt.getAirports();
+		Airport startAirport = airports.get(4);
 		System.out.println("startAirport:");
 		airportPrinter(startAirport);
-		Airport destination = airports.get(4);
+		Airport destination = airports.get(1);
 		System.out.println("destination:");
 		airportPrinter(destination);
 		Calendar startCal = Calendar.getInstance();
@@ -121,10 +122,10 @@ public class Driver {
 //			e.printStackTrace();
 //		}
 //		myTime.stop();
-		ItineraryBuilder builder = new ItineraryBuilder(myTime);
+		ItineraryBuilderTest builder = new ItineraryBuilderTest(myTime);
 		long start = System.nanoTime();
 //		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
-		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, returnCal);
+		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
 		long end = System.nanoTime();
 		long used = end - start;
 		System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
@@ -232,10 +233,10 @@ public class Driver {
 	/**
 	 * Simple method to print schedules for list of roundtrips
 	 * 
-	 * @param roundTrips
+	 * @param container
 	 */
-	public static void roundTripPrinter(List<RoundTrip> roundTrips){
-		for(RoundTrip trip: roundTrips){
+	public static void roundTripPrinter(List<RoundTrip> container){
+		for(RoundTrip trip: container){
 			System.out.println("+++++++++++++++++++++++++++");
 			System.out.println("Leave Schedule");
 			flightsPrinter(trip.getOutBound().getVoyoage());
@@ -265,3 +266,4 @@ public class Driver {
 	}
 
 }
+

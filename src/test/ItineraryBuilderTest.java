@@ -1,4 +1,4 @@
-package controller;
+package test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Queue;
 
+import controller.DataRetriever;
+import controller.MyTime;
 import model.Airplane;
 import model.Airport;
 import model.Flight;
@@ -15,7 +17,7 @@ import model.Flight;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class ItineraryBuilder {
+public class ItineraryBuilderTest {
 	
 	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
 	private MyTime myTime;
@@ -25,7 +27,7 @@ public class ItineraryBuilder {
 	/**
 	 * Constructor, initialize airportCache and time converter
 	 */
-	public ItineraryBuilder(MyTime time){
+	public ItineraryBuilderTest(MyTime time){
 		DataRetriever dr = new DataRetriever();
 		List<Airport> airports = dr.getAirports();
 
@@ -244,8 +246,8 @@ public class ItineraryBuilder {
 				depDateString = format.format(gmtCal.getTime());
 			}
 			// Get flights depart from current airport
-			DataRetriever dr = new DataRetriever();			
-			List<Flight> flights = dr.getFlights(currentAirport.getCode(), depDateString);
+			DataRetrieverTest drt = new DataRetrieverTest();			
+			List<Flight> flights = drt.getFlights(currentAirport.getCode(), depDateString);
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){
 					flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
@@ -388,3 +390,4 @@ public class ItineraryBuilder {
 	}
 		
 }
+
