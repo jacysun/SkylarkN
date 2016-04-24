@@ -1,4 +1,5 @@
 /controller/
+<<<<<<< HEAD
 /.DS_Store
 /ANC 12.xml
 /ATL 12.xml
@@ -15,3 +16,7 @@
 /model/
 /view/
 /test/
+=======
+/model/
+/view/
+>>>>>>> zanydruid

@@ -18,18 +18,7 @@ import model.Flight;
 public class Test {
 
 	public static void main(String[] args) {
-//		long millSec = 0;
-//		Calendar localCal = Calendar.getInstance();
-//		localCal.set(Calendar.HOUR_OF_DAY, 20);
-//		Calendar gmtCal = Calendar.getInstance();
-//		if(localCal.get(Calendar.HOUR_OF_DAY)>19){
-//			millSec = gmtCal.getTimeInMillis()+86400000;
-//		}
-//		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-//		String depDateString = format.format(millSec);
-//		
-//		System.out.println("local: "+ localCal.getTime());
-//		System.out.println("gmt: "+ depDateString);
+//	
 		MyTime m = new MyTime();
 //		ItineraryBuilder builder = new ItineraryBuilder(m); 
 //		try {
@@ -50,19 +39,26 @@ public class Test {
 //		PlaneParser parser = new PlaneParser();
 //		List<Airplane> planes = parser.start();
 		//planePrinter(planes);
-		long start = System.nanoTime();
-		ItineraryBuilder builder = new ItineraryBuilder(m);
-		Flight flight = new Flight();
-		flight.setAirplane("A310");
-		flight.setCoachSeats(200);
-		long start1 = System.nanoTime();
-		System.out.println(builder.coachSeatChecker(flight));
-		long end1 = System.nanoTime();
-		long used1 = end1 - start1;
-		System.out.println("function used:" + TimeUnit.NANOSECONDS.toMillis(used1) + " ms");
-		long end = System.nanoTime();
-		long used = end - start;
-		System.out.println("total used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
+//		String tempDateString = flightFrom.getArrivalTime();
+		Airport currentAirport = new Airport("Fake","LGA",12.3,14.5);
+		String tempDateString = "2016 May 10 23:30 GMT";
+		Calendar gmtCal = m.StringToCalendar(tempDateString, "GMT");
+		Calendar localCal = m.gmtToLocal(gmtCal, currentAirport);
+		System.out.println("day: "+localCal.get(Calendar.DAY_OF_MONTH));
+		System.out.println("hour: "+localCal.get(Calendar.HOUR_OF_DAY));
+		long millSec;
+		// If flight arrives at late night, 12:00-5 hours
+		if(localCal.get(Calendar.HOUR_OF_DAY)>19||localCal.get(Calendar.HOUR_OF_DAY)==19){
+			// Move to next day
+			millSec = gmtCal.getTimeInMillis()+86400000;
+		}else{
+			millSec = gmtCal.getTimeInMillis();
+		}
+		SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+		String depDateString = format.format(millSec);
+		System.out.println(depDateString);
+
+		
 	}
 	
 	public static void planePrinter(List<Airplane> planes){
