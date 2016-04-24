@@ -99,13 +99,33 @@ public class ItineraryBuilder {
 	 * 
 	 * @param planeList
 	 * @param flight
-	 * @return return true available
+	 * @return return true if available
 	 */
 	public boolean coachSeatChecker(Flight flight){
 		
 		for(Airplane plane: this.planeList){
 			if(plane.getModel().equals(flight.getAirplane())){
 				if(plane.getCoachSeats()==flight.getCoachSeats()){
+					return false;
+				}else{
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Check if first seat is available on this plane
+	 * 
+	 * @param flight
+	 * @return return true if available
+	 */
+	public boolean firstSeatChecker(Flight flight){
+		
+		for(Airplane plane: this.planeList){
+			if(plane.getModel().equals(flight.getAirplane())){
+				if(plane.getFirstClassSeats()==flight.getFirstClassSeats()){
 					return false;
 				}else{
 					return true;
@@ -237,6 +257,11 @@ public class ItineraryBuilder {
 					}
 					// Selected coach seat but not available
 					if(requestCoach&&!coachSeatChecker(flightTo)){
+						continue;
+					}
+					
+					// Selected first class seat but not available
+					if(!requestCoach&&!firstSeatChecker(flightTo)){
 						continue;
 					}
 					// Exclude flights arrive later than return date
