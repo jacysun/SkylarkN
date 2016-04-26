@@ -434,8 +434,7 @@ public class MyTime{
 				break;
 		default: month = "Invalid";
 				break;
-		}
-				
+		}				
 		return month + " " + date.substring(8) + ", " + date.substring(0,4);
 	}
 }

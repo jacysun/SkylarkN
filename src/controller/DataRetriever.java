@@ -23,6 +23,13 @@ import model.Airplane;
 import model.Airport;
 import model.Flight;
 
+/**
+ * DataRetriever works as boundary between system and external server,its responsibility
+ * is to retrieve information from server.
+ *
+ * @author team 6
+ *
+ */
 public class DataRetriever {
 	
 	/**
@@ -79,6 +86,11 @@ public class DataRetriever {
 		return flightList;
     }
     
+    /**
+     * Get airport list from server
+     * 
+     * @return
+     */
     public List<Airport> getAirports() {
 		List<Airport> airportList = new ArrayList<Airport>();
 		try {
@@ -112,7 +124,7 @@ public class DataRetriever {
 					result.append(line);
 				}
 				reader.close();
-				//System.out.println(result.toString());
+				
 
 				InputStream input = null;
 				try {
@@ -133,11 +145,7 @@ public class DataRetriever {
 						double lon = Double.parseDouble(lonString.trim());
 						Airport ap = new Airport(name, code, lat, lon);
 						airportList.add(ap);
-						// System.out.println("Code: " + code);
-						// System.out.println("Name: " + name);
-						// System.out.println("Latitude: " + lat);
-						// System.out.println("Longitude: " + lon);
-						// System.out.println("--------------------");
+
 					}
 				} catch (Exception ex) {
 					System.out.println(ex.getMessage());
@@ -159,6 +167,11 @@ public class DataRetriever {
 		return airportList;
     }
     
+    /**
+     * Get airplane list from server
+     * 
+     * @return
+     */
     public List<Airplane> getAirplanes() {
    	 InputStream inputXml = null;
    	 List<Airplane> planeList = new ArrayList<Airplane>();
@@ -183,13 +196,8 @@ public class DataRetriever {
    	          int coachSeat = Integer.parseInt(cs);
    	          Airplane airplane = new Airplane(mod,manu,firstSeat,coachSeat);
    	          planeList.add(airplane);
-//   	          System.out.println("Manufacturer: " + manu);
-//   	          System.out.println("Model: " + mod);
-//   	          System.out.println("First Class Seats: " + fs);
-//   	          System.out.println("Coach Seats: " + cs);
-//   	          System.out.println("-------------------------");
-   	        }
-   	       
+
+   	        }  	       
    	    }
    	    catch (Exception ex)
    	    {

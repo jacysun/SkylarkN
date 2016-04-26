@@ -15,6 +15,13 @@ import model.Flight;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+/**
+ * This class is responsible to build itinerary for the user, the two main methods are oneWayTrip and roundTrip.
+ * Others are supportive methods.
+ * 
+ * @author team 6
+ *
+ */
 public class ItineraryBuilder {
 	
 	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
