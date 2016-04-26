@@ -1,4 +1,4 @@
-package controller;
+package test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -8,6 +8,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Queue;
 
+import controller.DataRetriever;
+import controller.MyTime;
 import model.Airplane;
 import model.Airport;
 import model.Flight;
@@ -15,7 +17,7 @@ import model.Flight;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class ItineraryBuilder {
+public class ItineraryBuilderTest {
 	
 	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();
 	private MyTime myTime;
@@ -25,7 +27,7 @@ public class ItineraryBuilder {
 	/**
 	 * Constructor, initialize airportCache and time converter
 	 */
-	public ItineraryBuilder(MyTime time){
+	public ItineraryBuilderTest(MyTime time){
 		DataRetriever dr = new DataRetriever();
 		List<Airport> airports = dr.getAirports();
 
@@ -54,7 +56,6 @@ public class ItineraryBuilder {
 		Calendar calFrom = myTime.StringToCalendar(flightFrom.getArrivalTime(),"GMT");
 		Calendar calTo = myTime.StringToCalendar(flightTo.getDepartTime(),"GMT");
 		if(calTo.before(calFrom)){
-			// departure flight depart early than arrival flight, false
 			return false;
 		}
 		double timeInterval = myTime.getInterval(calFrom, calTo);
@@ -100,7 +101,7 @@ public class ItineraryBuilder {
 	 * 
 	 * @param planeList
 	 * @param flight
-	 * @return return true if available
+	 * @return return true available
 	 */
 	public boolean coachSeatChecker(Flight flight){
 		
@@ -137,7 +138,8 @@ public class ItineraryBuilder {
 		return false;
 	}
 	
-
+	
+	
 	/**
 	 * Works as a node in itinerary building process
 	 * 
@@ -216,10 +218,6 @@ public class ItineraryBuilder {
 			Airport currentAirport;
 			String depDateString;
 			Flight flightFrom;
-			// Container for flights on next day
-			List<Flight> extraFlights = new ArrayList<>();
-			
-			DataRetriever dr = new DataRetriever();
 			if(currentStop.getStopCounter()>0){
 				// We have left stop over airport
 				// Get the flight take you to current airport
@@ -228,19 +226,18 @@ public class ItineraryBuilder {
 				currentAirport = currentStop.getCurrentAirport();
 				// Get time arrived in current airport 
 				String tempDateString = flightFrom.getArrivalTime();
-				Calendar gmtCal = myTime.StringToCalendar(tempDateString, "GMT");				
-				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-				depDateString = format.format(gmtCal.getTime());
-				
-				// If flight arrives at late night, 00:00-5 hours
+				Calendar gmtCal = myTime.StringToCalendar(tempDateString, "GMT");
 				Calendar localCal = myTime.gmtToLocal(gmtCal, currentAirport);
-				if(localCal.get(Calendar.HOUR_OF_DAY)>1||localCal.get(Calendar.HOUR_OF_DAY)==19){
-					// Need to call next day flights, put them in extraFlights
-					long nextMillSec = gmtCal.getTimeInMillis()+86400000;
-					SimpleDateFormat nextFormat = new SimpleDateFormat("yyyy_MM_dd");
-					String NextDepDateString = nextFormat.format(nextMillSec);
-					extraFlights = dr.getFlights(currentAirport.getCode(), NextDepDateString);
-				}	
+				long millSec;
+				// If flight arrives at late night, 12:00-5 hours
+				if(localCal.get(Calendar.HOUR_OF_DAY)>19){
+					// Move to next day
+					millSec = gmtCal.getTimeInMillis()+86400000;
+				}else{
+					millSec = gmtCal.getTimeInMillis();
+				}
+				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
+				depDateString = format.format(millSec);
 			}else{
 				// We are at the start airport
 				currentAirport = currentStop.getCurrentAirport();
@@ -249,13 +246,8 @@ public class ItineraryBuilder {
 				depDateString = format.format(gmtCal.getTime());
 			}
 			// Get flights depart from current airport
-
-			List<Flight> flights = dr.getFlights(currentAirport.getCode(), depDateString);
-			// Overnight condition exists, add extraFlights to flights 
-			if(!extraFlights.isEmpty()){
-				flights.addAll(extraFlights);
-			}
-			
+			DataRetrieverTest drt = new DataRetrieverTest();			
+			List<Flight> flights = drt.getFlights(currentAirport.getCode(), depDateString);
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){
 					flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);
@@ -271,12 +263,9 @@ public class ItineraryBuilder {
 					if(requestCoach&&!coachSeatChecker(flightTo)){
 						continue;
 					}
-	
-					// Selected first class seat but not available
 					if(!requestCoach&&!firstClassSeatChecker(flightTo)){
 						continue;
 					}
-					
 					// Exclude flights arrive later than return date
 					if(!returnDateChecker(flightTo,returnDate,destination)){
 						continue;
@@ -401,3 +390,4 @@ public class ItineraryBuilder {
 	}
 		
 }
+

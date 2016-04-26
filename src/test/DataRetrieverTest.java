@@ -1,4 +1,4 @@
-package controller;
+package test;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -23,7 +23,7 @@ import model.Airplane;
 import model.Airport;
 import model.Flight;
 
-public class DataRetriever {
+public class DataRetrieverTest {
 	
 	/**
      * Populates the flight list with flights on a specific date departing from a specific airport
@@ -36,12 +36,12 @@ public class DataRetriever {
      */
     public List<Flight> getFlights(String depCode, String depDate) {
     	 List<Flight> flightList = new ArrayList<Flight>();
-    	 InputStream inputXml = null;
+    	 File input = null;
     	 try {
-    	     inputXml  = new URL("http://cs509.cs.wpi.edu:8181/CS509.server/ReservationSystem?team=Team06&action=list&list_type=departing&airport=" + depCode + "&day=" + depDate).openConnection().getInputStream();
+    	     input = new File("src/test/"+depCode+"_"+depDate+".xml");
     		 DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
     	     DocumentBuilder builder = factory.newDocumentBuilder();
-    	     Document doc = builder.parse(inputXml);
+    	     Document doc = builder.parse(input);
     	     NodeList flights = doc.getElementsByTagName("Flight");
 
     	     for(int i=0; i<flights.getLength();i++) {
@@ -63,19 +63,9 @@ public class DataRetriever {
     	        Flight fl = new Flight(plane, num, ftime, dcode, dtime, acode, atime, fcp, cp, fcn, cn);
     	        flightList.add(fl);  	          
     	      }
-    	  }
-    	  catch (Exception ex) {
+    	  } catch (Exception ex) {
     	       System.out.println(ex.getMessage());
     	  }
-    	  finally {
-    		  try {
-    			  if (inputXml != null)
-    	          inputXml.close();
-    		  }
-    	       catch (IOException ex) {
-    	          System.out.println(ex.getMessage());
-    	      }
-    	 }
 		return flightList;
     }
     
