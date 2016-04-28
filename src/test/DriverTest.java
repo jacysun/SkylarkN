@@ -25,17 +25,10 @@ import test.ItineraryBuilderTest.Schedule;
  */
 public class DriverTest {
 
-<<<<<<< HEAD
+
 	public static void main(String[] args) throws ParseException {
-		itineraryBuilderTest();	
-//		timeZoneConverterTest();
-=======
-	public static void main(String[] args) {
-
-		// Directly call test method in main to conduct unit tests.
 		itineraryBuilderTest();
-
->>>>>>> 39fcc4691fe14e8a58bff9caf3d38b393fcb7639
+//		timeZoneConverterTest();
 	}
 
 	/**
