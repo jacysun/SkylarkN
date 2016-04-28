@@ -83,11 +83,7 @@ public class DriverTest {
 
 	/**
 	 * ==================================================== 
-<<<<<<< HEAD
 	 * MyTime.timeZoneCache test 
-=======
-	 * MyTime.timeZoneCache test, Deprecated
->>>>>>> 39fcc4691fe14e8a58bff9caf3d38b393fcb7639
 	 * ====================================================
 	 */
 
