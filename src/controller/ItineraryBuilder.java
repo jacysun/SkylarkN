@@ -65,7 +65,7 @@ public class ItineraryBuilder {
 			return false;
 		}
 		double timeInterval = myTime.getInterval(calFrom, calTo);
-		System.out.println(timeInterval);
+		//System.out.println(timeInterval);
 		if(timeInterval>=1&&timeInterval<=5){
 			return true;
 		}else{

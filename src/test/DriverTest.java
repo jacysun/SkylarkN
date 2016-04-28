@@ -124,14 +124,14 @@ public class DriverTest {
 //		myTime.stop();
 		ItineraryBuilderTest builder = new ItineraryBuilderTest(myTime);
 		long start = System.nanoTime();
-//		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
-		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
+		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
+//		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
 		long end = System.nanoTime();
 		long used = end - start;
 		System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
-		System.out.println(container.size());
-//		schedulePrinter(result);
-		roundTripPrinter(container);
+//		System.out.println(container.size());
+		schedulePrinter(result);
+//		roundTripPrinter(container);
 		
 		
 	}
