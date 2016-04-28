@@ -27,7 +27,7 @@
       <div class="container">
         <div class="navbar-header">
           <div class="navbar-brand">
-            <a href="main.html"><h1>Skylark</h1></a>
+            <a href="index.html"><h1>Skylark</h1></a>
           </div>
 
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsable-nav" aria-expanded="false" aria-controls="navbar">
@@ -143,6 +143,8 @@ if (ol == null && rl == null) {
                   <input type="hidden" name="duration<%=j%>" value="<%= olp.get(i).getFlights().get(j).getDuration()%>">
                   <input type="hidden" name="airplane<%=j%>" value="<%= olp.get(i).getFlights().get(j).getAirplane()%>">
                   <input type="hidden" name="number<%=j%>" value="<%= olp.get(i).getFlights().get(j).getNumber()%>">
+                  <input type="hidden" name="cseat<%=j%>" value="<%= olp.get(i).getFlights().get(j).getCoachSeats()%>">
+                  <input type="hidden" name="fcseat<%=j%>" value="<%= olp.get(i).getFlights().get(j).getFirstClassSeats()%>">
                   <%if(j< olp.get(i).getFlights().size() -1) { %>
                   <input type="hidden" name="interval<%=j%>" value="<%=intervals[j] %> hr">
                   <%} }%>
@@ -227,6 +229,8 @@ if (ol == null && rl == null) {
                   <input type="hidden" name="dduration<%=j%>" value="<%= rlp.get(i).getDepItinerary().getFlights().get(j).getDuration()%>">
                   <input type="hidden" name="dairplane<%=j%>" value="<%= rlp.get(i).getDepItinerary().getFlights().get(j).getAirplane()%>">
                   <input type="hidden" name="dnumber<%=j%>" value="<%= rlp.get(i).getDepItinerary().getFlights().get(j).getNumber()%>">
+                  <input type="hidden" name="dcseat<%=j%>" value="<%= rlp.get(i).getDepItinerary().getFlights().get(j).getCoachSeats()%>">
+                  <input type="hidden" name="dfcseat<%=j%>" value="<%= rlp.get(i).getDepItinerary().getFlights().get(j).getFirstClassSeats()%>">
                   <%if(j< rlp.get(i).getDepItinerary().getFlights().size() -1) { %>
                   <input type="hidden" name="dinterval<%=j%>" value="<%=dintervals[j] %> hr">
                   <%} }%>
@@ -238,7 +242,9 @@ if (ol == null && rl == null) {
                   <input type="hidden" name="rduration<%=j%>" value="<%= rlp.get(i).getRetItinerary().getFlights().get(j).getDuration()%>">
                   <input type="hidden" name="rairplane<%=j%>" value="<%= rlp.get(i).getRetItinerary().getFlights().get(j).getAirplane()%>">
                   <input type="hidden" name="rnumber<%=j%>" value="<%= rlp.get(i).getRetItinerary().getFlights().get(j).getNumber()%>">
-                  <%if(j< rlp.get(i).getDepItinerary().getFlights().size() -1) { %>
+                  <input type="hidden" name="rcseat<%=j%>" value="<%= rlp.get(i).getRetItinerary().getFlights().get(j).getCoachSeats()%>">
+                  <input type="hidden" name="rfcseat<%=j%>" value="<%= rlp.get(i).getRetItinerary().getFlights().get(j).getFirstClassSeats()%>">
+                  <%if(j< rlp.get(i).getRetItinerary().getFlights().size() -1) { %>
                   <input type="hidden" name="rinterval<%=j%>" value="<%=rintervals[j] %> hr">
                   <%} }%>
                   <input type="submit" value="Select" style="position:relative; left: 500px;">

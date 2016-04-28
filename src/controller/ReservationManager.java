@@ -30,10 +30,12 @@ public class ReservationManager extends HttpServlet {
 			int stop = Integer.parseInt(request.getParameter("stop"));
 			for (int i = 0; i < stop + 1; i++) {
 				if (db.reserveSeat(request.getParameter("number" + i), seatType) == false) {
+					db.unlock();
 					dispatcher = request.getRequestDispatcher("reservationError.jsp");
 				    dispatcher.forward(request, response);
 				}
 			}
+			db.unlock();
 			dispatcher = request.getRequestDispatcher("reservationSuccess.jsp");
 		    dispatcher.forward(request, response);
 			
@@ -42,19 +44,22 @@ public class ReservationManager extends HttpServlet {
 			int rstop = Integer.parseInt(request.getParameter("rstop"));
 			for (int i = 0; i < dstop + 1; i++) {
 				if (db.reserveSeat(request.getParameter("dnumber" + i), seatType) == false) {
+					db.unlock();
 					dispatcher = request.getRequestDispatcher("reservationError.jsp");
 				    dispatcher.forward(request, response);
 				}
 			}
 			for (int j = 0; j < rstop + 1; j++) {
 				if (db.reserveSeat(request.getParameter("rnumber" + j), seatType) == false) {
+					db.unlock();
 					dispatcher = request.getRequestDispatcher("reservationError.jsp");
 				    dispatcher.forward(request, response);
 				}
 			}
+			db.unlock();
 			dispatcher = request.getRequestDispatcher("reservationSuccess.jsp");
 		    dispatcher.forward(request, response);
 		}
-		db.unlock();
+		
 	}
 }

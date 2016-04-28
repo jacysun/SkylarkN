@@ -252,18 +252,23 @@ public class DriverTest {
 		flights = dt.getFlights("BOS", "2016_05_12");
 		String flightNumber = flights.get(0).getNumber();
 		int seatsReservedStart = flights.get(0).getFirstClassSeats();
+		String seatType = "FirstClass";
 		
 		DBUpdater db = new DBUpdater();
 		db.lock();
-		db.reserveSeat(flightNumber, "FirstClass");
+		System.out.println("----------------------------");
+		db.reserveSeat(flightNumber, seatType);
+		System.out.println("----------------------------");
 		db.unlock();
+		System.out.println("----------------------------");
 		
 		flights.clear();
 		flights = dt.getFlights("BOS", "2016_05_12");
 		int seatsReservedEnd = flights.get(0).getFirstClassSeats();
-		System.out.println("flight Number: " + flightNumber);
-		System.out.println("seat before: " + seatsReservedStart + "seat after: " + seatsReservedEnd);
+		System.out.println("Flight Number: " + flightNumber);
+		System.out.println("Reserved Seat Type: " + seatType);
+		System.out.println("SeatReserved before: " + seatsReservedStart);
+		System.out.println("SeatReserved after: " + seatsReservedEnd);
 	}
-
 }
 

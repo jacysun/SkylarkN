@@ -240,7 +240,7 @@ public class ItineraryBuilder {
 				
 				// If flight arrives at late night, 00:00-5 hours
 				Calendar localCal = myTime.gmtToLocal(gmtCal, currentAirport);
-				if(localCal.get(Calendar.HOUR_OF_DAY)>1||localCal.get(Calendar.HOUR_OF_DAY)==19){
+				if(localCal.get(Calendar.HOUR_OF_DAY)>19||localCal.get(Calendar.HOUR_OF_DAY)==19){
 					// Need to call next day flights, put them in extraFlights
 					long nextMillSec = gmtCal.getTimeInMillis()+86400000;
 					SimpleDateFormat nextFormat = new SimpleDateFormat("yyyy_MM_dd");
