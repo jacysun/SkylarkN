@@ -1,5 +1,6 @@
 package test;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -18,8 +19,9 @@ import test.ItineraryBuilderTest.Schedule;
 
 public class DriverTest {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		itineraryBuilderTest();	
+//		timeZoneConverterTest();
 	}
 
 	/**
@@ -27,7 +29,7 @@ public class DriverTest {
 	 * MyTime.timeZoneForAirport test
 	 * ====================================================
 	 */
-	public static void timeZoneConverterTest() {
+	public static void timeZoneForAirportTest() {
 		DataRetrieverTest dr = new DataRetrieverTest();
 		List<Airport> airports = dr.getAirports();
 		Airport testAirport1 = airports.get(3);
@@ -42,13 +44,40 @@ public class DriverTest {
 
 	/**
 	 * ====================================================
-	 * MyTime.timeZoneForAirport test
+	 * MyTime.timeZoneConverter test
 	 * ====================================================
+	 * @throws ParseException 
 	 */
+	public static void timeZoneConverterTest() throws ParseException {
+		DataRetrieverTest dr = new DataRetrieverTest();
+		List<Airport> airports = dr.getAirports();
+		Airport testAirport = airports.get(4);
+		MyTime myTime = new MyTime();
+		String gmt = "2016 APR 24 14:00 GMT";
+		Calendar shua = myTime.stringToCalendar(gmt);
+		Calendar mia = Calendar.getInstance();
+		mia = myTime.gmtToLocal(shua, testAirport);
+		String local = myTime.calendarToString(mia);
+		System.out.println(gmt);
+		System.out.println(local);
+		System.out.println("------------------");
+		String local2 = "2016 APR 24 20:00 EDT";
+		Calendar pia = myTime.stringToCalendar(local2);
+		Calendar bia = Calendar.getInstance();
+		bia = myTime.localToGmt(pia, testAirport);
+		String gmt2 = myTime.calendarToString(bia);
+		System.out.println(local2);
+		System.out.println(gmt2);
+		System.out.println("------------------");
+		System.out.println(myTime.getInterval(shua, pia));
+		
+		
+	}
 
 	/**
-	 * ==================================================== MyTime.timeZoneCache
-	 * test ====================================================
+	 * ==================================================== 
+	 * MyTime.timeZoneCache test 
+	 * ====================================================
 	 */
 
 	public static void timeZoneCacheTest() {
@@ -125,15 +154,15 @@ public class DriverTest {
 		ItineraryBuilderTest builder = new ItineraryBuilderTest(myTime);
 		long start = System.nanoTime();
 //		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, false);
+//		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, false, startCal);
+//		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
 		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
-		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
-//		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
 		long end = System.nanoTime();
 		long used = end - start;
 		System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
 //		System.out.println(container.size());
-		schedulePrinter(result);
-//		roundTripPrinter(container);
+//		schedulePrinter(result);
+		roundTripPrinter(container);
 		
 		
 	}
