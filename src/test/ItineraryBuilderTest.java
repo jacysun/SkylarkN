@@ -17,6 +17,15 @@ import model.Flight;
 import java.util.HashMap;
 import java.util.LinkedList;
 
+
+/**
+ * A mock up itinerary builder class to simulate itinerary building processes,
+ * the basic function are same as itineraryBuilder with minor changes
+ * 
+ * @author team 6
+ *
+ */
+
 public class ItineraryBuilderTest {
 	
 	private HashMap<String, Airport> airportCache = new HashMap<String, Airport>();

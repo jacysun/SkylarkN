@@ -7,6 +7,12 @@ import java.util.Collections;
 import model.Itinerary;
 import model.Itinerary.RoundTripItinerary;
 
+/**
+ * A class to sort list of itineraries by different orders
+ * 
+ * @author team 6
+ *
+ */
 public class ItinerarySorter {
 	
 	public ArrayList<Itinerary> sortByPrice(ArrayList<Itinerary> il) {

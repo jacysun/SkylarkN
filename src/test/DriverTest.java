@@ -16,9 +16,16 @@ import model.Flight;
 import test.ItineraryBuilderTest.RoundTrip;
 import test.ItineraryBuilderTest.Schedule;
 
+/**
+ * Test Driver, where real tests conduct here one by one.
+ * 
+ * @author team 6
+ *
+ */
 public class DriverTest {
 
 	public static void main(String[] args) {
+		// Directly call test method in main to conduct unit tests.
 		itineraryBuilderTest();
 	}
 
@@ -47,8 +54,9 @@ public class DriverTest {
 	 */
 
 	/**
-	 * ==================================================== MyTime.timeZoneCache
-	 * test ====================================================
+	 * ==================================================== 
+	 * MyTime.timeZoneCache test, Deprecated
+	 * ====================================================
 	 */
 
 	public static void timeZoneCacheTest() {
@@ -75,14 +83,14 @@ public class DriverTest {
 	 * ====================================================
 	 */
 	public void layoverCheckerTest() {
-		// Flight arrive at DEN
-//		Flight flightArrival = new Flight("A320", "3587", "227", "CLT", "2016 May 13 09:51 GMT", "DEN",
-//				"2016 May 13 13:38 GMT", "198.00", "220.00", 20, 20);
+//		// Flight arrive at DEN
+//		Flight flightArrival = new Flight("A320", "3587", 227, "CLT", "2016 May 12 00:51 GMT", "DEN",
+//				"2016 May 12 04:41 GMT", 198.00, 220.00, 20, 20);
 //		// Flight depart from DEN
-//		Flight flightDepart = new Flight("C120", "2681", "327", "DEN", "2016 May 13 16:31 GMT", "BOS",
-//				"2016 May 13 21:38 GMT", "198.00", "220.00", 20, 20);
-
-//		ItineraryBuilder builder = new ItineraryBuilder();
+//		Flight flightDepart = new Flight("C120", "2681", 327, "DEN", "2016 May 12 05:41 GMT", "BOS",
+//				"2016 May 12 21:38 GMT", 198.00, 220.00, 20, 20);
+//		MyTime m = new MyTime();
+//		ItineraryBuilder builder = new ItineraryBuilder(m);
 //		boolean result = builder.layoverChecker(flightArrival, flightDepart);
 //		System.out.println(result);
 	}
