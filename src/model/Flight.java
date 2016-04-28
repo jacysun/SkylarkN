@@ -59,10 +59,10 @@ public class Flight {
 	}
 	
 	public String getArrLocal() throws ParseException {
-		Airport arrival = new Airport();
-		arrival = arrival.getAirport(this.arrivalCode);
+//		Airport arrival = new Airport();
+//		arrival = arrival.getAirport(this.arrivalCode);
 		Calendar arrCal = myTime.StringToCalendar(this.arrivalTime, "GMT");
-		Calendar arrLocalCal = myTime.gmtToLocal(arrCal, arrival);
+		Calendar arrLocalCal = myTime.gmtTolocalString(arrCal, arrivalCode);
 		String arrLocal = myTime.calendarToString(arrLocalCal);
 		return arrLocal;
 	}

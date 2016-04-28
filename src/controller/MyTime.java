@@ -294,6 +294,20 @@ public class MyTime{
 		cal.setTimeZone(TimeZone.getTimeZone(timeZoneCache.get(airport.getCode())));
 		return cal;
 	}
+	
+	/**
+	 * Convert a GMT to a local time with string input
+	 * 
+	 * @param gmtCal
+	 * @param airportCode
+	 * @return
+	 */
+	public Calendar gmtTolocalString(Calendar gmtCal, String airportCode){
+		Calendar cal = (Calendar) gmtCal.clone();
+		cal.setTimeZone(TimeZone.getTimeZone("GMT"));
+		cal.setTimeZone(TimeZone.getTimeZone(timeZoneCache.get(airportCode)));
+		return cal;
+	}
 	/**
 	 * Convert a local time of an airport to GMT
 	 * 
