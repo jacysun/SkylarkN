@@ -420,7 +420,8 @@ public class MyTime{
       String day = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
       String hour = String.valueOf(cal.get(Calendar.HOUR_OF_DAY));
       String minute = String.valueOf(cal.get(Calendar.MINUTE));
-      String time = month + " " + day + ", " + year + " " + hour + ":" + minute;
+      String timeZone = String.valueOf(cal.getTimeZone().getDisplayName());
+      String time = month + " " + day + ", " + year + " " + hour + ":" + minute + " " +timeZone;
       return time;
 	}
 	
