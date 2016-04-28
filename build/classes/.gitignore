@@ -1,22 +1,5 @@
-/controller/
-<<<<<<< HEAD
 /.DS_Store
-/ANC 12.xml
-/ATL 12.xml
-/ATL 13.xml
-/AUS 12.xml
-/BOS 12.xml
-/BWI 12.xml
-/ANC_2016_05_12.xml
-/ATL_2016_05_12.xml
-/ATL_2016_05_13.xml
-/AUS_2016_05_12.xml
-/BOS_2016_05_12.xml
-/BWI_2016_05_12.xml
-/model/
-/view/
 /test/
-=======
+/controller/
 /model/
 /view/
->>>>>>> zanydruid

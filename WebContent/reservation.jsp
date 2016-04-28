@@ -26,7 +26,7 @@
       <div class="container">
         <div class="navbar-header">
           <div class="navbar-brand">
-            <a href="main.html"><h1>Skylark</h1></a>
+            <a href="index.html"><h1>Skylark</h1></a>
           </div>
 
           <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collapsable-nav" aria-expanded="false" aria-controls="navbar">
@@ -72,7 +72,11 @@ String[] numbers = new String[3];
       <p><%=request.getParameter("depLocal" + i) %> --- <%=request.getParameter("arrLocal" + i) %></p>
       <p><%=request.getParameter("depCode" + i) %> --- <%=request.getParameter("arrCode" + i) %> (<%=request.getParameter("duration" + i) %> hr)</p>
       <p>Airplane : <%=request.getParameter("airplane" + i) %><span style="position:relative; left: 50px;">Flight Number : <%= numbers[i] %></span></p>
-      <%if (i < stop) { %>
+      <%if(seatType.equals("Coach")){ %>
+      <p>CoachSeatReserved : <%=request.getParameter("cseat" + i) %></p>
+      <%} else if (seatType.equals("FirstClass")) { %>
+      <p>FirstClassSeatReserved : <%=request.getParameter("fcseat" + i) %></p>
+      <%} if (i < stop) { %>
         <hr><p><%=request.getParameter("interval" + i) %></p><hr>
     <%}} %>
   </div>
@@ -104,7 +108,11 @@ String[] rnumbers = new String[3];
       <p><%=request.getParameter("ddepLocal" + i) %> --- <%=request.getParameter("darrLocal" + i) %></p>
       <p><%=request.getParameter("ddepCode" + i) %> --- <%=request.getParameter("darrCode" + i) %> (<%=request.getParameter("dduration" + i) %> hr)</p>
       <p>Airplane: <%=request.getParameter("dairplane" + i) %><span style="position:relative; left: 50px;">Flight Number : <%=dnumbers[i] %></span></p>
-      <%if (i < dstop) { %>
+      <%if(seatType.equals("Coach")){ %>
+      <p>CoachSeatReserved : <%=request.getParameter("dcseat" + i) %></p>
+      <%} else if (seatType.equals("FirstClass")) { %>
+      <p>FirstClassSeatReserved : <%=request.getParameter("dfcseat" + i) %></p>
+      <%} if (i < dstop) { %>
         <hr><p><%=request.getParameter("dinterval" + i) %></p><hr>
     <%}} %>
   <hr><p>Return --- <%=retDate %> (<%=rstop %> stop)</p><hr>
@@ -113,7 +121,11 @@ String[] rnumbers = new String[3];
       <p><%=request.getParameter("rdepLocal" + i) %> --- <%=request.getParameter("rarrLocal" + i) %></p>
       <p><%=request.getParameter("rdepCode" + i) %> --- <%=request.getParameter("rarrCode" + i) %> (<%=request.getParameter("rduration" + i) %> hr)</p>
       <p>Airplane : <%=request.getParameter("rairplane" + i) %><span style="position:relative; left: 50px;">Flight Number : <%=rnumbers[i] %></span></p>
-      <%if (i < dstop) { %>
+      <%if(seatType.equals("Coach")){ %>
+      <p>CoachSeatReserved : <%=request.getParameter("rcseat" + i) %></p>
+      <%} else if (seatType.equals("FirstClass")) { %>
+      <p>FirstClassSeatReserved : <%=request.getParameter("rfcseat" + i) %></p>
+      <%} if (i < dstop) { %>
         <hr><p><%=request.getParameter("rinterval" + i) %></p><hr>
     <%}} %>
     </div>
