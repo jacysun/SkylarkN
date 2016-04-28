@@ -1,0 +1,1 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Flights><Flight Airplane="A380" FlightTime="134" Number="1699"><Departure><Code>AUS</Code><Time>2016 May 13 05:08 GMT</Time></Departure><Arrival><Code>ATL</Code><Time>2016 May 13 07:22 GMT</Time></Arrival><Seating><FirstClass Price="$79.11">97</FirstClass><Coach Price="$23.71">408</Coach></Seating></Flight></Flights>

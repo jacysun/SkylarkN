@@ -20,6 +20,7 @@ public class DriverTest {
 
 	public static void main(String[] args) {
 		itineraryBuilderTest();
+		
 	}
 
 	/**
@@ -27,13 +28,13 @@ public class DriverTest {
 	 * MyTime.timeZoneForAirport test
 	 * ====================================================
 	 */
-	public void timeZoneConverterTest() {
+	public static void timeZoneConverterTest() {
 		DataRetrieverTest dr = new DataRetrieverTest();
 		List<Airport> airports = dr.getAirports();
 		Airport testAirport1 = airports.get(3);
 		System.out.println("Test airport1: " + testAirport1.getCode());
 		Airport testAirport2 = airports.get(24);
-		System.out.println("Test airport2: " + testAirport2.getCode());
+//		System.out.println("Test airport2: " + testAirport2.getCode());
 //		String testResult1 = MyTime.timeZoneForAirport(testAirport1);
 //		System.out.println("Test result 1: " + testResult1);
 //		String testResult2 = MyTime.timeZoneForAirport(testAirport2);
@@ -124,7 +125,7 @@ public class DriverTest {
 //		myTime.stop();
 		ItineraryBuilderTest builder = new ItineraryBuilderTest(myTime);
 		long start = System.nanoTime();
-//		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
+//		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, false);
 		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
 		long end = System.nanoTime();
 		long used = end - start;
@@ -180,6 +181,8 @@ public class DriverTest {
 			System.out.println("departTime: " + flight.getDepartTime());
 			System.out.println("arrivalCode: " + flight.getArrivalCode());
 			System.out.println("arrivalTime: " + flight.getArrivalTime());
+			System.out.println("Coach: " + flight.getCoachSeats());
+			System.out.println("First Class: " + flight.getFirstClassSeats());
 			System.out.println("=========================================");
 		}
 	}

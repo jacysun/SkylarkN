@@ -1,1 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Flights><Flight Airplane="A340" FlightTime="458" Number="0385"><Departure><Code>ATL</Code><Time>2016 May 13 01:50 GMT</Time></Departure><Arrival><Code>ANC</Code><Time>2016 May 13 09:28 GMT</Time></Arrival><Seating><FirstClass Price="$1083.46">17</FirstClass><Coach Price="$129.37">256</Coach></Seating></Flight></Flights>
