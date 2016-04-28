@@ -40,6 +40,7 @@ public class DataRetriever {
      * 
      * @param depCode	Code of the airport to depart from
      * @param depDate	Date of the departure flight
+     * @return List of flights depart in the depCode airport on depDate
      */
     public List<Flight> getFlights(String depCode, String depDate) {
     	 List<Flight> flightList = new ArrayList<Flight>();
@@ -89,7 +90,7 @@ public class DataRetriever {
     /**
      * Get airport list from server
      * 
-     * @return
+     * @return List of all airports
      */
     public List<Airport> getAirports() {
 		List<Airport> airportList = new ArrayList<Airport>();
@@ -170,7 +171,7 @@ public class DataRetriever {
     /**
      * Get airplane list from server
      * 
-     * @return
+     * @return List of all airplanes
      */
     public List<Airplane> getAirplanes() {
    	 InputStream inputXml = null;

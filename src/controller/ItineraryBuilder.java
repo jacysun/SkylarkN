@@ -55,7 +55,7 @@ public class ItineraryBuilder {
 	 */
 	public boolean layoverChecker(Flight flightFrom,Flight flightTo){
 		if(!flightFrom.getArrivalCode().equals(flightTo.getDepartCode())){
-			System.out.print("These two flights are not in the same airport!!!");
+			//System.out.print("These two flights are not in the same airport!!!");
 			return false;
 		}
 		Calendar calFrom = myTime.StringToCalendar(flightFrom.getArrivalTime(),"GMT");
@@ -145,7 +145,7 @@ public class ItineraryBuilder {
 	
 
 	/**
-	 * Works as a node in itinerary building process
+	 * Works as a temporary container of schedules in itinerary building process
 	 * 
 	 * @author yizhu
 	 *
@@ -317,7 +317,7 @@ public class ItineraryBuilder {
 	 * @param depDate	departure date
 	 * @param maxStop	maximum stops can be specified by user
 	 * @param coach		if request coach seat
-	 * @return
+	 * @return List of schedules of one way trips
 	 */
 	public List<Schedule> oneWayTrip(Airport depAirport, Airport destination,
 			Calendar depDate, int maxStop, boolean coach){
@@ -357,7 +357,7 @@ public class ItineraryBuilder {
 	 * @param maxStop	maximum stop time, could be 0,1,2,3..
 	 * @param coach		if coach seat is selected, true means coach seat selected
 	 * @param returnDate date of return from destination
-	 * @return
+	 * @return List of schedules of round trips
 	 */
 	public List<RoundTrip> roundTrip(Airport depAirport, Airport destination,
 			Calendar depDate, int maxStop, boolean coach, Calendar returnDate){

@@ -5,7 +5,14 @@ import java.util.ArrayList;
 import model.Itinerary;
 import model.Itinerary.RoundTripItinerary;
 
+/**
+ * A class to apply filter to list of itineraries
+ * 
+ * @author team 6
+ *
+ */
 public class ItineraryFilter {
+
 	
 	public ArrayList<Itinerary> filterOneWay(ArrayList<Itinerary> il, boolean nonstop, boolean onestop, boolean twostop) {
 		ArrayList<Itinerary> fil = new ArrayList<Itinerary>();
