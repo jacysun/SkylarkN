@@ -50,7 +50,7 @@ public class ItineraryBuilderTest {
 	 */
 	public boolean layoverChecker(Flight flightFrom,Flight flightTo){
 		if(!flightFrom.getArrivalCode().equals(flightTo.getDepartCode())){
-			System.out.print("These two flights are not in the same airport!!!");
+//			System.out.print("These two flights are not in the same airport!!!");
 			return false;
 		}
 		Calendar calFrom = myTime.StringToCalendar(flightFrom.getArrivalTime(),"GMT");

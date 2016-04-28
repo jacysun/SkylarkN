@@ -19,8 +19,7 @@ import test.ItineraryBuilderTest.Schedule;
 public class DriverTest {
 
 	public static void main(String[] args) {
-		itineraryBuilderTest();
-		
+		itineraryBuilderTest();	
 	}
 
 	/**
@@ -125,13 +124,10 @@ public class DriverTest {
 //		myTime.stop();
 		ItineraryBuilderTest builder = new ItineraryBuilderTest(myTime);
 		long start = System.nanoTime();
-<<<<<<< HEAD
 //		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, false);
 		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
-=======
 		List<Schedule> result = builder.oneWayTrip(startAirport, destination, startCal, 2, true);
 //		List<RoundTrip> container = builder.roundTrip(startAirport, destination, startCal, 2, true, startCal);
->>>>>>> 38b59dd3ad42b5866fd37f5cfb6461d127a2e286
 		long end = System.nanoTime();
 		long used = end - start;
 		System.out.println("used:" + TimeUnit.NANOSECONDS.toMillis(used) + " ms");
