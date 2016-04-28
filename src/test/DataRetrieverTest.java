@@ -23,6 +23,13 @@ import model.Airplane;
 import model.Airport;
 import model.Flight;
 
+/**
+ * A mock up class for testing, replacing DataRetriever class to retriever flights, airports and planes information 
+ * from a mock up server
+ * 
+ * @author team 6
+ *
+ */
 public class DataRetrieverTest {
 	
 	/**
@@ -33,6 +40,7 @@ public class DataRetrieverTest {
      * 
      * @param depCode	Code of the airport to depart from
      * @param depDate	Date of the departure flight
+     * 
      */
     public List<Flight> getFlights(String depCode, String depDate) {
     	 List<Flight> flightList = new ArrayList<Flight>();

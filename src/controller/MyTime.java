@@ -204,7 +204,7 @@ public class MyTime{
 	 * Call Google TimeZone API to xml, parse this xml to get timezone string
 	 * 
 	 * @param airport
-	 * @return
+	 * @return String represents time zone
 	 */
 	private String timeZoneForAirport(Airport airport){
 		double latitude = airport.getLatitude();
@@ -246,9 +246,9 @@ public class MyTime{
 	/**
 	 * Get response from Google API with a location
 	 * 
-	 * @param latitude
-	 * @param longitude
-	 * @return
+	 * @param latitude latitude of an airport
+	 * @param longitude longitude of an airport
+	 * @return String Buffer from server
 	 */
 	private StringBuffer getResponse(double latitude, double longitude){
 		// Build query parameters, location and default timestamp
@@ -284,9 +284,9 @@ public class MyTime{
 	/**
 	 * Convert a GMT to a local time of an airport
 	 * 
-	 * @param gmtCal
+	 * @param gmtCal GMT calendar
 	 * @param airport
-	 * @return
+	 * @return A local Calendar
 	 */
 	public Calendar gmtToLocal(Calendar gmtCal, Airport airport){	
 		Calendar cal = (Calendar) gmtCal.clone();
@@ -297,9 +297,9 @@ public class MyTime{
 	/**
 	 * Convert a local time of an airport to GMT
 	 * 
-	 * @param localCal
-	 * @param airport
-	 * @return
+	 * @param localCal local calendar
+	 * @param airport 
+	 * @return A GMT Calendar
 	 */
 	public Calendar localToGmt(Calendar localCal, Airport airport){
 		Calendar cal = (Calendar) localCal.clone();
@@ -311,9 +311,9 @@ public class MyTime{
 	/**
 	 * Calculate the interval between two GMT time
 	 * 
-	 * @param calFir
-	 * @param calSec
-	 * @return
+	 * @param calFir first calendar
+	 * @param calSec second calendar
+	 * @return interval between two calendars
 	 */
 	public double getInterval(Calendar calFir, Calendar calSec){
 		final int SECOND = 1000;
@@ -331,7 +331,7 @@ public class MyTime{
 	 * Convert String to calendar form "yyyy MMM dd HH:mm z"
 	 * 
 	 * @param dateString
-	 * @return
+	 * @return A calendar converted from String
 	 */
 	public Calendar StringToCalendar(String dateString, String timeZone){
 		Calendar cal = Calendar.getInstance();
@@ -346,7 +346,12 @@ public class MyTime{
 		return cal;			
 	}
 	
-
+	/**
+	 *  Convert calendar to a String of "yyyy MMM dd HH:mm"
+	 *  
+	 * @param cal A calendar need to be converted to string
+	 * @return string of date
+	 */
 	public String CalendarToString(Calendar cal){
 		String year = String.valueOf(cal.get(Calendar.YEAR));
 		String month = String.valueOf(cal.get(Calendar.MONTH)+1);
