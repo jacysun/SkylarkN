@@ -49,9 +49,9 @@ public class ItineraryBuilder {
 	/**
 	 * Check if the interval between two flights are 1~5 hour which is a qualified layover.
 	 * 
-	 * @param flightFrom
-	 * @param flightTo
-	 * @return boolean 
+	 * @param flightFrom flight arrives at current airport
+	 * @param flightTo flight departs from current airport
+	 * @return boolean return true mean it's a valid layover case
 	 */
 	public boolean layoverChecker(Flight flightFrom,Flight flightTo){
 		if(!flightFrom.getArrivalCode().equals(flightTo.getDepartCode())){
@@ -65,6 +65,7 @@ public class ItineraryBuilder {
 			return false;
 		}
 		double timeInterval = myTime.getInterval(calFrom, calTo);
+		//System.out.println(timeInterval);
 		if(timeInterval>=1&&timeInterval<=5){
 			return true;
 		}else{
@@ -73,11 +74,11 @@ public class ItineraryBuilder {
 	}
 	
 	/**
+	 * In round trip case, check if the return date is later than the arriving date of a flight.
 	 * 
-	 * 
-	 * @param flight
-	 * @param returnCal
-	 * @return
+	 * @param flight a flight to be investigated
+	 * @param returnCal date of return
+	 * @return return true if it's the case descried above
 	 */
 	public boolean returnDateChecker(Flight flight, Calendar returnCal, Airport destination){
 		Calendar gmtReturnCal = myTime.localToGmt(returnCal, destination);
@@ -105,8 +106,7 @@ public class ItineraryBuilder {
 	/**
 	 * Check if coach seat is available on this plane  
 	 * 
-	 * @param planeList
-	 * @param flight
+	 * @param flight The target flight, we want to investigate its coach seat
 	 * @return return true if available
 	 */
 	public boolean coachSeatChecker(Flight flight){
@@ -126,8 +126,7 @@ public class ItineraryBuilder {
 	/**
 	 * Check if firstclass seat is available on this plane  
 	 * 
-	 * @param planeList
-	 * @param flight
+	 * @param flight The target flight, we want to investigate its first class seat
 	 * @return return true available
 	 */
 	public boolean firstClassSeatChecker(Flight flight){
@@ -201,8 +200,8 @@ public class ItineraryBuilder {
 	 * @param startAirport user inputs departure airport
 	 * @param destination  user inputs arrival airport
 	 * @param depDate	   user inputs departure date
-	 * @param maxStop      user inputs number of stops, optional, if user does not
-	 * 							specify stop, default value is 2.
+	 * @param maxStop      user inputs number of stops, optional, if user does not specify stop, default value is 2.
+	 * @param requestCoach	true means selected coach seat, false means selected first class seat						
 	 * @return List of schedules
 	 */
 	public List<Schedule> itineraryBuilder(Airport startAirport, Airport destination, Calendar depDate, 
@@ -241,7 +240,7 @@ public class ItineraryBuilder {
 				
 				// If flight arrives at late night, 00:00-5 hours
 				Calendar localCal = myTime.gmtToLocal(gmtCal, currentAirport);
-				if(localCal.get(Calendar.HOUR_OF_DAY)>1||localCal.get(Calendar.HOUR_OF_DAY)==19){
+				if(localCal.get(Calendar.HOUR_OF_DAY)>19||localCal.get(Calendar.HOUR_OF_DAY)==19){
 					// Need to call next day flights, put them in extraFlights
 					long nextMillSec = gmtCal.getTimeInMillis()+86400000;
 					SimpleDateFormat nextFormat = new SimpleDateFormat("yyyy_MM_dd");
@@ -352,12 +351,12 @@ public class ItineraryBuilder {
 	/**
 	 * Round trip builder
 	 * 
-	 * @param depAirport
-	 * @param destination
-	 * @param depDate
-	 * @param maxStop
-	 * @param coach
-	 * @param returnDate
+	 * @param depAirport departure airport
+	 * @param destination destination airport
+	 * @param depDate	departure date
+	 * @param maxStop	maximum stop time, could be 0,1,2,3..
+	 * @param coach		if coach seat is selected, true means coach seat selected
+	 * @param returnDate date of return from destination
 	 * @return
 	 */
 	public List<RoundTrip> roundTrip(Airport depAirport, Airport destination,

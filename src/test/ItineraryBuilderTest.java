@@ -210,6 +210,9 @@ public class ItineraryBuilderTest {
 		Schedule start = new Schedule(startAirport);
 		// Enqueue
 		scheduleQueue.add(start);
+		List<Flight> extraFlights = new ArrayList<>();
+		
+		DataRetrieverTest drt = new DataRetrieverTest();
 		
 		while(!scheduleQueue.isEmpty()){
 			Schedule currentStop = scheduleQueue.poll();
@@ -226,18 +229,19 @@ public class ItineraryBuilderTest {
 				currentAirport = currentStop.getCurrentAirport();
 				// Get time arrived in current airport 
 				String tempDateString = flightFrom.getArrivalTime();
-				Calendar gmtCal = myTime.StringToCalendar(tempDateString, "GMT");
-				Calendar localCal = myTime.gmtToLocal(gmtCal, currentAirport);
-				long millSec;
-				// If flight arrives at late night, 12:00-5 hours
-				if(localCal.get(Calendar.HOUR_OF_DAY)>19){
-					// Move to next day
-					millSec = gmtCal.getTimeInMillis()+86400000;
-				}else{
-					millSec = gmtCal.getTimeInMillis();
-				}
+				Calendar gmtCal = myTime.StringToCalendar(tempDateString, "GMT");				
 				SimpleDateFormat format = new SimpleDateFormat("yyyy_MM_dd");
-				depDateString = format.format(millSec);
+				depDateString = format.format(gmtCal.getTime());
+				
+				// If flight arrives at late night, 00:00-5 hours
+				Calendar localCal = myTime.gmtToLocal(gmtCal, currentAirport);
+				// If flight arrives at late night, 12:00-5 hours
+				if(localCal.get(Calendar.HOUR_OF_DAY)>19||localCal.get(Calendar.HOUR_OF_DAY)==19){
+					long nextMillSec = gmtCal.getTimeInMillis()+86400000;
+					SimpleDateFormat nextFormat = new SimpleDateFormat("yyyy_MM_dd");
+					String NextDepDateString = nextFormat.format(nextMillSec);
+					extraFlights = drt.getFlights(currentAirport.getCode(), NextDepDateString);
+				}
 			}else{
 				// We are at the start airport
 				currentAirport = currentStop.getCurrentAirport();
@@ -246,8 +250,12 @@ public class ItineraryBuilderTest {
 				depDateString = format.format(gmtCal.getTime());
 			}
 			// Get flights depart from current airport
-			DataRetrieverTest drt = new DataRetrieverTest();			
+						
 			List<Flight> flights = drt.getFlights(currentAirport.getCode(), depDateString);
+			// Overnight condition exists, add extraFlights to flights 
+			if(!extraFlights.isEmpty()){
+				flights.addAll(extraFlights);
+			}
 			for(Flight flightTo: flights){
 				if(currentStop.getStopCounter()>0){
 					flightFrom = currentStop.getVoyoage().get(currentStop.getStopCounter()-1);

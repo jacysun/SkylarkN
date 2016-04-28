@@ -322,6 +322,7 @@ public class MyTime{
 		long timeFir = calFir.getTimeInMillis();
 		long timeSec = calSec.getTimeInMillis();
 		double interval = Math.abs((double)(timeFir-timeSec)/HOUR);
+		//System.out.println(interval);
 		return interval;
 	}
 	
